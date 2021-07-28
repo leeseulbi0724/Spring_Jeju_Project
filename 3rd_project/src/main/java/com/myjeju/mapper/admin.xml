@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="mapper.admin">
+
+	<!-- 관리자 멤버 -->
+		<select id="listnum" parameterType="map" resultType="com.myjeju.vo.MemberVO">
+			select rno, id, pass, name, birth, email, hp, addr1, addr2, mdate, point 
+             from(select rownum rno, id, pass, name, birth, email, hp, addr1, addr2, mdate, point
+				     from(select * from myjeju_member order by mdate desc))
+				     where rno between #{start} and #{end}
+		</select>
+		<select id="listsearch" parameterType="java.util.Map" resultType="com.myjeju.vo.MemberVO">
+			<choose>
+				<when test='search.equals("name")'>
+				select rno, id, pass, name, birth, email, hp, addr1, addr2, mdate, point
+				     from(select rownum rno,id, pass, name, birth, email, hp, addr1, addr2, mdate, point
+				     from(select * from MYJEJU_member order by mdate desc) where name like '%'||#{search_text}||'%')
+				     where rno between #{start} and #{end}
+				</when>
+				<otherwise>
+				select rno, id, pass, name, birth, email, hp, addr1, addr2, mdate, point
+				     from(select rownum rno,id, pass, name, birth, email, hp, addr1, addr2, mdate, point
+				     from(select * from MYJEJU_member order by mdate desc) where id like '%'||#{search_text}||'%' )
+				     where rno between #{start} and #{end}
+				</otherwise>
+			</choose>
+		</select>
+		<select id="target" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+			select count(num) from(select rownum num from MYJEJU_member) where num >= #{pageNumber}
+		</select>
+		<select id="searchtarget1" parameterType="java.util.Map" resultType="java.lang.Integer">
+			<choose>
+				<when test='search.equals("name")'>
+				select count(num) from(select rownum num from myjeju_member where name like '%'||#{search_text}||'%') where num >= #{pageNumber}
+				</when>
+				<otherwise>
+				select count(num) from(select rownum num from myjeju_member where id like '%'||#{search_text}||'%') where num >= #{pageNumber}
+				</otherwise>
+			</choose>
+		</select>
+		<select id="getmember" parameterType="java.lang.String" resultType="com.myjeju.vo.MemberVO">
+			select * from myjeju_member where id = #{id}
+		</select>
+	
+	<!-- 관리자 숙소 -->
+		<select id="listnumhouse" parameterType="map" resultType="com.myjeju.vo.HouseVO">
+			select rno, hid, h_name, h_infor, h_infor2, h_tag, h_addr, h_vpoint, h_hpoint, h_hp, h_img, h_like
+             from(select rownum rno, hid, h_name, h_infor, h_infor2, h_tag, h_addr, h_vpoint, h_hpoint, h_hp, h_img, h_like
+				     from(select * from myjeju_house order by rownum desc))
+				     where rno between #{start} and #{end}
+		</select>
+		<select id="listsearchhouse" parameterType="java.util.Map" resultType="com.myjeju.vo.HouseVO">
+			<choose>
+				<when test='search.equals("name")'>
+				select rno, hid, h_name, h_infor, h_infor2, h_tag, h_addr, h_vpoint, h_hpoint, h_hp, h_img, h_like
+				     from(select rownum rno, hid, h_name, h_infor, h_infor2, h_tag, h_addr, h_vpoint, h_hpoint, h_hp, h_img, h_like
+				     from(select * from MYJEJU_house order by rownum desc) where h_name like '%'||#{search_text}||'%')
+				     where rno between #{start} and #{end}
+				</when>
+				<otherwise>
+				select rno, hid, h_name, h_infor, h_infor2, h_tag, h_addr, h_vpoint, h_hpoint, h_hp, h_img, h_like
+				     from(select rownum rno, hid, h_name, h_infor, h_infor2, h_tag, h_addr, h_vpoint, h_hpoint, h_hp, h_img, h_like
+				     from(select * from MYJEJU_house order by rownum desc) where hid like '%'||#{search_text}||'%' )
+				     where rno between #{start} and #{end}
+				</otherwise>
+			</choose>
+		</select>
+		<select id="targethouse" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+			select count(num) from(select rownum num from MYJEJU_house) where num >= #{pageNumber}
+		</select>
+		<select id="searchtargethouse" parameterType="java.util.Map" resultType="java.lang.Integer">
+			<choose>
+				<when test='search.equals("name")'>
+				select count(num) from(select rownum num from myjeju_house where h_name like '%'||#{search_text}||'%') where num >= #{pageNumber}
+				</when>
+				<otherwise>
+				select count(num) from(select rownum num from myjeju_house where hid like '%'||#{search_text}||'%') where num >= #{pageNumber}
+				</otherwise>
+			</choose>
+		</select>
+		<select id="gethouse" parameterType="java.lang.String" resultType="com.myjeju.vo.HouseVO">
+			select * from myjeju_house where hid = #{hid}
+		</select>
+		<!-- 숙소 등록 -->
+		<insert id="houseInsert" parameterType="com.myjeju.vo.HouseVO" >
+			insert into myjeju_house values('h_'||sequ_myjeju_house.nextval,#{h_name},#{h_infor},#{h_infor2},#{h_tag},#{h_addr},#{h_vpoint},#{h_hpoint},#{h_hp},1,#{h_img},#{h_file}, #{email},0,0)
+		</insert>
+		<!-- 숙소 수정 화면 -->
+		<select id = "house_content" parameterType = "java.lang.String" resultType = "com.myjeju.vo.HouseVO">
+			select * from myjeju_house where hid=#{hid}
+		</select>
+		<!-- 숙소 파일 포함 업데이트 -->
+		<update id="house_update_file" parameterType="com.myjeju.vo.HouseVO">
+			update myjeju_house set h_name = #{h_name}, h_infor = #{h_infor}, h_infor2 = #{h_infor2}, h_tag = #{h_tag}, h_addr = #{h_addr}, h_vpoint = #{h_vpoint}, h_hpoint = #{h_hpoint}, h_hp = #{h_hp}, h_img = #{h_img}, h_file = #{h_file}, email=#{email} where hid = #{hid}
+		</update>
+		
+		<!-- 숙소 파일 미포함 업데이트 -->
+		<update id="house_update_no_file" parameterType="com.myjeju.vo.HouseVO">
+			update myjeju_house set h_name = #{h_name}, h_infor = #{h_infor}, h_infor2 = #{h_infor2}, h_tag = #{h_tag}, h_addr = #{h_addr}, h_vpoint = #{h_vpoint}, h_hpoint = #{h_hpoint}, h_hp = #{h_hp}, email=#{email} where hid = #{hid}
+		</update>
+		
+		<!-- 숙소 기존 파일 가져오기 -->
+		<select id="house_oldfile" parameterType="java.lang.String" resultType="java.lang.String">
+			select h_file from myjeju_house where hid = #{hid}
+		</select>
+		<!-- 숙소 삭제 -->
+		<delete id="house_delete" parameterType="java.lang.String">
+			delete from myjeju_house where hid = #{hid}
+		</delete>	
+		
+	<!-- 관리자 객실 -->	
+		<select id="listdehouse" parameterType="java.lang.String" resultType="com.myjeju.vo.HDetailVO">
+			select rownum rno,hid,hdid,hd_name,hd_price,hd_people,hd_img from myjeju_hdetail where hid = #{hid}
+		</select>
+		<select id="getdehousecontent" parameterType="java.lang.String" resultType="com.myjeju.vo.HDetailVO">
+			select * from myjeju_hdetail where hdid = #{hdid}
+		</select>
+		<insert id = "hdetail_upload" parameterType="com.myjeju.vo.HDetailVO">
+			insert into myjeju_hdetail values(#{hid}, 'hd_'||sequ_myjeju_hdetail.nextval, #{hd_name}, #{hd_price}, #{hd_people}, #{hd_img}, #{hd_file})
+		</insert>
+		<update id="hdetail_update" parameterType="com.myjeju.vo.HDetailVO">
+			update myjeju_hdetail set hd_name = #{hd_name}, hd_price=#{hd_price}, hd_people=#{hd_people}, hd_img = #{hd_img}, hd_file=#{hd_file} where hid=#{hid} and hdid=#{hdid}
+		</update>
+		<delete id="hdetail_delete" parameterType="java.lang.String">
+			delete from myjeju_hdetail where hdid=#{hdid}
+		</delete>
+	<!-- 관리자 객실 룸 -->	
+		<select id="listdehouseroom" parameterType="java.lang.String" resultType="com.myjeju.vo.RoomdeVO">
+			select rownum rno,hdid,roomid,room_name from myjeju_hdroom where hdid = #{hdid} order by room_name
+		</select>
+		<select id="getmonthcheck" parameterType="java.util.Map" resultType="com.myjeju.vo.RoomVO">
+			select * from myjeju_reservation where rdate like '%'||#{month}||'%' and roomid = #{roomid}
+		</select>
+		<insert id = "insertres" parameterType="com.myjeju.vo.RoomVO">
+			insert into myjeju_reservation values(#{roomid},#{rdate},#{available})
+		</insert>
+		<insert id = "uploadroom" parameterType="java.util.Map">
+		    insert into myjeju_hdroom values(#{hdid},'hdr_'||sequ_myjeju_room.nextval,#{room_name})
+		</insert>
+		<select id="getroom" parameterType="java.lang.String" resultType="com.myjeju.vo.RoomdeVO">
+			select * from myjeju_hdroom where roomid = #{roodid}
+		</select>
+		<insert id = "deleteroom" parameterType="java.lang.String">
+			delete from myjeju_hdroom where roomid = #{roodid}
+		</insert>
+		<update id="notavail" parameterType="java.util.Map">
+			update myjeju_reservation set available = 2 where rdate = #{date} and roomid=#{roomid}
+		</update>
+		<update id="toavail" parameterType="java.util.Map">
+			update myjeju_reservation set available = 0 where rdate = #{date} and roomid=#{roomid}
+		</update>
+	<!-- 관리자 맛집 -->
+		<select id="listnumfood" parameterType="map" resultType="com.myjeju.vo.FoodVO">
+			select rno, fid, f_name, f_tag, f_infor, f_infor2, f_addr, f_vpoint, f_hpoint, f_hp, f_like, f_file, f_sfile
+             from(select rownum rno, f_name, fid, f_tag, f_infor, f_infor2, f_addr, f_vpoint, f_hpoint, f_hp, f_like,  f_file, f_sfile
+				     from(select * from myjeju_food order by rownum desc))
+				     where rno between #{start} and #{end}
+		</select>
+		<select id="listsearchfood" parameterType="java.util.Map" resultType="com.myjeju.vo.FoodVO">
+			<choose>
+				<when test='search.equals("name")'>
+				select rno, fid, f_name, f_tag, f_infor, f_infor2, f_addr, f_vpoint, f_hpoint, f_hp, f_like,  f_file, f_sfile
+				     from(select rownum rno, fid, f_name, f_tag, f_infor, f_infor2, f_addr, f_vpoint, f_hpoint, f_hp, f_like,  f_file, f_sfile
+				     from(select * from MYJEJU_food order by rownum desc) where f_name like '%'||#{search_text}||'%')
+				     where rno between #{start} and #{end}
+				</when>
+				<otherwise>
+				select rno, fid, f_name, f_tag, f_infor, f_infor2, f_addr, f_vpoint, f_hpoint, f_hp, f_like,  f_file, f_sfile
+				     from(select rownum rno, fid, f_name, f_tag, f_infor, f_infor2, f_addr, f_vpoint, f_hpoint, f_hp, f_like,  f_file, f_sfile
+				     from(select * from MYJEJU_food order by rownum desc) where f_addr like '%'||#{search_text}||'%')
+				     where rno between #{start} and #{end}
+				</otherwise>
+			</choose>
+		</select>
+		<select id="targetfood" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+			select count(num) from(select rownum num from MYJEJU_food) where num >= #{pageNumber}
+		</select>
+		<select id="searchtargetfood" parameterType="java.util.Map" resultType="java.lang.Integer">
+			<choose>
+				<when test='search.equals("name")'>
+				select count(num) from(select rownum num from myjeju_food where f_name like '%'||#{search_text}||'%') where num >= #{pageNumber}
+				</when>
+				<otherwise>
+				select count(num) from(select rownum num from myjeju_food where f_addr like '%'||#{search_text}||'%') where num >= #{pageNumber}
+				</otherwise>
+			</choose>
+		</select>
+		<insert id="food_upload" parameterType="com.myjeju.vo.FoodVO" >
+			insert into myjeju_food values('f_'||sequ_myjeju_food.nextval,#{f_name},#{f_tag},#{f_infor},#{f_infor2},#{f_addr},#{f_vpoint},#{f_hpoint},#{f_hp},0,#{f_file},#{f_sfile}, 0, 0 )
+		</insert>
+		<select id= "food_content" parameterType="java.lang.String" resultType="com.myjeju.vo.FoodVO">
+			select * from myjeju_food where fid=#{fid}
+		</select>
+		<update id="food_update" parameterType="com.myjeju.vo.FoodVO">
+			update myjeju_food set f_name = #{f_name}, f_tag=#{f_tag}, f_infor=#{f_infor}, f_infor2=#{f_infor2}, f_addr=#{f_addr}, f_vpoint=#{f_vpoint}, f_hpoint=#{f_hpoint}, f_hp=#{f_hp}, f_file = #{f_file}, f_sfile=#{f_sfile} where fid=#{fid}
+		</update>
+		<delete id="food_delete" parameterType="java.lang.String">
+			delete from myjeju_food where fid=#{fid}
+		</delete>
+		
+		<!-- 관리자 여행지 -->
+		<select id="listnumtravel" parameterType="map" resultType="com.myjeju.vo.TravelVO">
+			select rno, tid, t_name, t_tag, t_infor, t_infor2, t_addr, t_vpoint, t_hpoint, t_hp, t_like, t_file, t_sfile
+             from(select rownum rno, tid, t_name, t_tag, t_infor, t_infor2, t_addr, t_vpoint, t_hpoint, t_hp, t_like, t_file, t_sfile
+				     from(select * from myjeju_travel order by rownum desc))
+				     where rno between #{start} and #{end}
+		</select>
+		<select id="listsearchtravel" parameterType="java.util.Map" resultType="com.myjeju.vo.TravelVO">
+			<choose>
+				<when test='search.equals("name")'>
+				select rno, tid, t_name, t_tag, t_infor, t_infor2, t_addr, t_vpoint, t_hpoint, t_hp, t_like, t_file, t_sfile
+				     from(select rownum rno, tid, t_name, t_tag, t_infor, t_infor2, t_addr, t_vpoint, t_hpoint, t_hp, t_like, t_file, t_sfile
+				     from(select * from myjeju_travel order by rownum desc) where t_name like '%'||#{search_text}||'%')
+				     where rno between #{start} and #{end}
+				</when>
+				<otherwise>
+				select rno, tid, t_name, t_tag, t_infor, t_infor2, t_addr, t_vpoint, t_hpoint, t_hp, t_like, t_file, t_sfile
+				     from(select rownum rno, tid, t_name, t_tag, t_infor, t_infor2, t_addr, t_vpoint, t_hpoint, t_hp, t_like, t_file, t_sfile
+				     from(select * from myjeju_travel order by rownum desc) where t_addr like '%'||#{search_text}||'%' )
+				     where rno between #{start} and #{end}
+				</otherwise>
+			</choose>
+		</select>
+		<select id="targettravel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+			select count(num) from(select rownum num from myjeju_travel) where num >= #{pageNumber}
+		</select>
+		<select id="searchtargettravel" parameterType="java.util.Map" resultType="java.lang.Integer">
+			<choose>
+				<when test='search.equals("name")'>
+				select count(num) from(select rownum num from myjeju_travel where t_name like '%'||#{search_text}||'%') where num >= #{pageNumber}
+				</when>
+				<otherwise>
+				select count(num) from(select rownum num from myjeju_travel where t_addr like '%'||#{search_text}||'%') where num >= #{pageNumber}
+				</otherwise>
+			</choose>
+		</select>
+		<select id= "gettravel" parameterType="java.lang.String" resultType="com.myjeju.vo.TravelVO">
+			select * from myjeju_travel where tid=#{tid}
+		</select>
+		<insert id="travel_upload" parameterType="com.myjeju.vo.TravelVO" >
+			insert into myjeju_travel values('t_'||sequ_myjeju_travel.nextval,#{t_name},#{t_tag},#{t_infor},#{t_infor2},#{t_addr},#{t_vpoint},#{t_hpoint},#{t_hp},0,#{t_file},#{t_sfile}, 0, 0)
+		</insert>
+		<update id="travel_update" parameterType="com.myjeju.vo.TravelVO">
+			update myjeju_travel set t_name = #{t_name}, t_tag=#{t_tag}, t_infor=#{t_infor}, t_infor2=#{t_infor2}, t_addr=#{t_addr}, t_vpoint=#{t_vpoint}, t_hpoint=#{t_hpoint}, t_hp=#{t_hp}, t_file = #{t_file}, t_sfile=#{t_sfile} where tid=#{tid}
+		</update>
+		<delete id="travel_delete" parameterType="java.lang.String">
+			delete from myjeju_travel where tid=#{tid}
+		</delete>
+		<!-- 여행지 스팟 -->
+		<insert id="travel_photospot_upload" parameterType="com.myjeju.vo.PhotoSpotVO">
+			insert into myjeju_photo_spot values('ps_'||sequ_myjeju_travel_photo_spot.nextval,#{tid},#{ps_name},#{ps_infor},#{ps_psfile},#{ps_pssfile})
+		</insert>
+		<insert id="travel_carspot_upload" parameterType="com.myjeju.vo.CarSpotVO">
+			insert into myjeju_car_spot values('cs_'||sequ_myjeju_travel_car_spot.nextval,#{tid},#{cs_name},#{cs_infor},#{cs_csfile},#{cs_cssfile})
+		</insert>
+		
+		<select id="photo_spot" parameterType="java.lang.String" resultType="com.myjeju.vo.PhotoSpotVO">
+			select myjeju_travel.t_name, myjeju_photo_spot.tid, myjeju_photo_spot.ps_name, myjeju_photo_spot.ps_infor, myjeju_photo_spot.ps_psfile,myjeju_photo_spot.ps_pssfile
+				from myjeju_travel, myjeju_photo_spot 
+				where myjeju_travel.tid = myjeju_photo_spot.tid and myjeju_travel.tid=#{tid}
+		</select>
+		<select id="car_spot" parameterType="java.lang.String" resultType="com.myjeju.vo.CarSpotVO">
+			select myjeju_travel.t_name, myjeju_car_spot.tid, myjeju_car_spot.cs_name, myjeju_car_spot.cs_infor, myjeju_car_spot.cs_csfile, myjeju_car_spot.cs_cssfile
+				from myjeju_travel, myjeju_car_spot 
+				where myjeju_travel.tid = myjeju_car_spot.tid and myjeju_travel.tid=#{tid}
+		</select>
+		
+		<update id="photospot_update" parameterType="com.myjeju.vo.PhotoSpotVO">
+			update myjeju_photo_spot set ps_name=#{ps_name}, ps_infor=#{ps_infor}, ps_psfile=#{ps_psfile} , ps_pssfile=#{ps_pssfile} where tid=#{tid}
+		</update>
+		<update id="carspot_update" parameterType="com.myjeju.vo.CarSpotVO">
+			update myjeju_car_spot set cs_name=#{cs_name}, cs_infor=#{cs_infor}, cs_csfile=#{cs_csfile} , cs_cssfile=#{cs_cssfile} where tid=#{tid}
+		</update>
+		
+		<delete id="photospot_delete" parameterType="java.lang.String">
+			delete from myjeju_photo_spot where tid=#{tid}
+		</delete>
+		<delete id="carspot_delete" parameterType="java.lang.String">
+			delete from myjeju_car_spot where tid=#{tid}
+		</delete>
+		
+		<!-- 관리자 카페 -->
+		<select id="listnumcafe" parameterType="map" resultType="com.myjeju.vo.CafeVO">
+			select rno, caid, ca_name, ca_tag, ca_infor, ca_infor2, ca_addr, ca_vpoint, ca_hpoint, ca_hp, ca_like, ca_file, ca_sfile
+				from (select rownum rno, caid, ca_name, ca_tag, ca_infor, ca_infor2, ca_addr, ca_vpoint, ca_hpoint, ca_hp, ca_like, ca_file, ca_sfile
+					from (select * from myjeju_cafe order by rownum desc)) 
+						where rno between #{start} and #{end}
+		</select>
+		<select id="listsearchcafe" parameterType="java.util.Map" resultType="com.myjeju.vo.CafeVO">
+			<choose>
+				<when test='search.equals("name")'>
+				select rno, caid, ca_name, ca_tag, ca_infor, ca_infor2, ca_addr, ca_vpoint, ca_hpoint, ca_hp, ca_like, ca_file, ca_sfile
+					from (select rownum rno, caid, ca_name, ca_tag, ca_infor, ca_infor2, ca_addr, ca_vpoint, ca_hpoint, ca_hp, ca_like, ca_file, ca_sfile
+						from (select * from myjeju_cafe order by rownum desc) where ca_name like '%'||#{search_text}||'%') 
+							where rno between #{start} and #{end}
+				</when>
+				<otherwise>
+				select rno, caid, ca_name, ca_tag, ca_infor, ca_infor2, ca_addr, ca_vpoint, ca_hpoint, ca_hp, ca_like, ca_file, ca_sfile
+					from (select rownum rno, caid, ca_name, ca_tag, ca_infor, ca_infor2, ca_addr, ca_vpoint, ca_hpoint, ca_hp, ca_like, ca_file, ca_sfile
+						from (select * from myjeju_cafe order by rownum desc) where ca_addr like '%'||#{search_text}||'%') 
+							where rno between #{start} and #{end}
+				</otherwise>
+			</choose>
+		</select>
+		<select id="targetcafe" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+			select count(num) from (select rownum num from myjeju_cafe) where num >= #{pageNumber}
+		</select>
+		<select id="searchtargetcafe" parameterType="java.util.Map" resultType="java.lang.Integer">
+			<choose>
+				<when test='search.equals("name")'>
+				select count(num) from (select rownum num from myjeju_cafe where ca_name like '%'||#{search_text}||'%') where num >= #{pageNumber}
+				</when>
+				<otherwise>
+				select count(num) from (select rownum num from myjeju_cafe where ca_addr like '%'||#{search_text}||'%') where num >= #{pageNumber}
+				</otherwise>
+			</choose>
+		</select>
+		<insert id="cafe_upload" parameterType="com.myjeju.vo.CafeVO" >
+			insert into myjeju_cafe values('ca_'||sequ_myjeju_cafe.nextval, #{ca_name}, #{ca_tag}, #{ca_infor}, #{ca_infor2}, #{ca_addr}, #{ca_vpoint}, #{ca_hpoint}, #{ca_hp}, 0, #{ca_file}, #{ca_sfile}, 0, 0)
+		</insert>
+		<select id= "cafe_content" parameterType="java.lang.String" resultType="com.myjeju.vo.CafeVO">
+			select * from myjeju_cafe where caid = #{caid}
+		</select>
+		<update id="cafe_update" parameterType="com.myjeju.vo.CafeVO">
+			update myjeju_cafe set ca_name = #{ca_name}, ca_tag = #{ca_tag}, ca_infor = #{ca_infor}, ca_infor2 = #{ca_infor2}, ca_addr = #{ca_addr}, ca_vpoint = #{ca_vpoint}, ca_hpoint = #{ca_hpoint}, ca_hp = #{ca_hp}, ca_file = #{ca_file}, ca_sfile = #{ca_sfile} where caid = #{caid}
+		</update>
+		<delete id="cafe_delete" parameterType="java.lang.String">
+			delete from myjeju_cafe where caid = #{caid}
+		</delete>
+		
+		<!-- 관리자 게시판 -->
+		<select id="board_list" parameterType="map" resultType="com.myjeju.vo.CommunityVO">
+			select rno, fid, id, ftitle, fhit, fdate 
+             from(select rownum rno, fid, id, ftitle, fhit, fdate 
+				     from(select * from myjeju_free_board order by fdate desc))
+				     where rno between #{start} and #{end}
+		</select>
+		
+		<select id="board_count" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+			select count(num) from(select rownum num from MYJEJU_free_board) where num >= #{pageNumber}
+		</select>
+		
+		<select id="board_search" parameterType="java.util.Map" resultType="com.myjeju.vo.CommunityVO">
+			<choose>
+				<when test='search.equals("name")'>
+				select rno, fid, id, ftitle, fhit, fdate
+				     from(select rownum rno, fid, id, ftitle, fhit, fdate
+				     from(select * from MYJEJU_free_board order by fdate desc) where ftitle like '%'||#{search_text}||'%')
+				     where rno between #{start} and #{end}
+				</when>
+				<otherwise>
+				select rno, fid, id, ftitle, fhit, fdate
+				     from(select rownum rno, fid, id, ftitle, fhit, fdate
+				     from(select * from MYJEJU_free_board order by fdate desc) where id like '%'||#{search_text}||'%' )
+				     where rno between #{start} and #{end}
+				</otherwise>
+			</choose>
+		</select>
+		
+		<select id="board_searchpage" parameterType="java.util.Map" resultType="java.lang.Integer">
+			<choose>
+				<when test='search.equals("name")'>
+				select count(num) from(select rownum num from myjeju_free_board where ftitle like '%'||#{search_text}||'%') where num >= #{pageNumber}
+				</when>
+				<otherwise>
+				select count(num) from(select rownum num from myjeju_free_board where id like '%'||#{search_text}||'%') where num >= #{pageNumber}
+				</otherwise>
+			</choose>
+		</select>
+		
+		
+		<!-- 관리자 공지사항 -->
+		<insert id="notice_write" parameterType="com.myjeju.vo.NoticeVO">
+		<choose>
+			<when test = "nfile == null">
+				insert into myjeju_notice values('n_'||sequ_myjeju_notice.nextval,#{ntitle}, #{ncontent}, sysdate, 0, null, null)
+			</when>
+			<otherwise>
+					insert into myjeju_notice values('n_'||sequ_myjeju_notice.nextval,#{ntitle}, #{ncontent}, sysdate, 0, #{nfile}, #{nsfile})
+			</otherwise>
+		</choose>		
+		</insert>
+		
+		<select id="notice_list" parameterType="map" resultType="com.myjeju.vo.NoticeVO">
+			select rno, nid, ntitle, ncontent, nfile, nsfile, ndate, ncount
+             from(select rownum  rno, nid, ntitle, ncontent, nfile, nsfile, ndate, ncount
+				     from(select * from myjeju_notice order by ndate desc))
+				     where rno between #{start} and #{end}
+		</select>
+		
+		<select id="notice_count" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+			select count(num) from(select rownum num from MYJEJU_notice) where num >= #{pageNumber}
+		</select>
+		
+		<select id="notice_search" parameterType="java.util.Map" resultType="com.myjeju.vo.NoticeVO">			
+			select rno, nid, ntitle, ncontent, nfile, nsfile, ndate 
+			     from(select rownum rno, nid, ntitle, ncontent, nfile, nsfile, ndate 
+			     from(select * from MYJEJU_notice order by ndate desc) where ntitle like '%'||#{search_text}||'%')
+			     where rno between #{start} and #{end}
+		</select>
+		
+		<select id="notice_searchpage" parameterType="java.util.Map" resultType="java.lang.Integer">			
+			select count(num) from(select rownum num from myjeju_notice where ntitle like '%'||#{search_text}||'%') where num >= #{pageNumber}
+		</select>
+		
+		<select id="notice_content" parameterType="java.lang.String" resultType="com.myjeju.vo.NoticeVO">			
+			select nid, ntitle, ncontent, nfile, nsfile, ndate from myjeju_notice where nid=#{nid}
+		</select>
+		
+		<!-- 파일 포함 업데이트 -->
+		<update id="yes_update" parameterType="com.myjeju.vo.NoticeVO">
+			update myjeju_notice set ntitle=#{ntitle}, ncontent=#{ncontent}, nfile=#{nfile}, nsfile=#{nsfile} where nid=#{nid}
+		</update>
+		
+		<!-- 파일 미포함 업데이트 -->
+		<update id="no_update" parameterType="com.myjeju.vo.NoticeVO">
+			update myjeju_notice set ntitle=#{ntitle}, ncontent=#{ncontent} where nid=#{nid}
+		</update>
+		
+		<!-- 기존 파일 가져오기 -->
+		<select id="oldfile" parameterType="java.lang.String" resultType="java.lang.String">
+			select nsfile from myjeju_notice where nid=#{nid}
+		</select>
+		
+		<!-- 공지사항 삭제 -->
+		<delete id="notice_delete" parameterType="java.lang.String">
+			delete from myjeju_notice where nid=#{nid}
+		</delete>
+		
+		
+		
+		<!-- 관리자 요청 -->
+		<select id="request_list" parameterType="map" resultType="com.myjeju.vo.CommunityVO">
+			select rno, rid, id, rcategory, rtitle, rcontent, rfile, rsfile, rdate
+             from(select rownum  rno, rid, id, rcategory, rtitle, rcontent, rfile, rsfile, rdate
+				     from(select * from myjeju_request_board order by rdate desc))
+				     where rno between #{start} and #{end}
+		</select>
+		<select id="request_count" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+			select count(num) from(select rownum num from MYJEJU_request_board) where num >= #{pageNumber}
+		</select>
+		<select id="request_search" parameterType="java.util.Map" resultType="com.myjeju.vo.CommunityVO">
+			<choose>
+				<when test='search.equals("id")'>
+				select rno, rid, id, rcategory, rtitle, rcontent, rfile, rsfile, rdate
+				     from(select rownum rno, rid, id, rcategory, rtitle, rcontent, rfile, rsfile, rdate
+				     from(select * from MYJEJU_request_board order by rdate desc) where id like '%'||#{search_text}||'%')
+				     where rno between #{start} and #{end}
+				</when>
+				<otherwise>
+				select rno, rid, id, rcategory, rtitle, rcontent, rfile, rsfile, rdate
+				     from(select rownum rno, rid, id, rcategory, rtitle, rcontent, rfile, rsfile, rdate
+				     from(select * from MYJEJU_request_board order by fdate desc) where ntitle like '%'||#{search_text}||'%' )
+				     where rno between #{start} and #{end}
+				</otherwise>
+			</choose>
+		</select>
+		<select id="request_searchpage" parameterType="java.util.Map" resultType="java.lang.Integer">
+			<choose>
+				<when test='search.equals("name")'>
+				select count(num) from(select rownum num from myjeju_request_board where ntitle like '%'||#{search_text}||'%') where num >= #{pageNumber}
+				</when>
+				<otherwise>
+				select count(num) from(select rownum num from myjeju_request_board where id like '%'||#{search_text}||'%') where num >= #{pageNumber}
+				</otherwise>
+			</choose>
+		</select>
+		<select id="request_content" parameterType="java.lang.String" resultType="com.myjeju.vo.CommunityVO">
+			select id, rid, rcategory, rtitle, rcontent, rdate, rfile, rsfile from myjeju_request_board where rid=#{rid}
+		</select>
+		<insert id="request_comment" parameterType="com.myjeju.vo.CommunityVO">
+			insert into myjeju_request_re values(#{rid}, #{rcontent}, sysdate)
+		</insert>
+		<select id="request_comment_result" parameterType="java.lang.String" resultType="com.myjeju.vo.CommunityVO">
+			select rid, rcontent, rrdate from myjeju_request_re where rid=#{rid}
+		</select>
+		<delete id="request_delete" parameterType="java.lang.String">
+			delete from myjeju_request_board where rid=#{rid}
+		</delete>
+		
+		
+		
+		<!-- 스토어 스토어 스토어 -->
+		
+		<!-- 관리자 - 스토어 list -->
+		<select id = "store_list" parameterType="map" resultType="com.myjeju.vo.StoreVO">
+			select rno, sid, s_category, s_name, s_price, s_image, s_content, s_sfile, s_ssfile
+				from(select rownum rno, sid, s_category, s_name, s_price, s_image, s_content, s_sfile, s_ssfile
+				     from(select * from myjeju_store order by rownum desc))
+				     where rno between #{start} and #{end}
+		</select>
+		
+		<!-- 관리자 - 스토어 list search -->
+		<select id = "store_search" parameterType = "java.util.Map" resultType = "com.myjeju.vo.StoreVO">
+				<choose>
+				<when test='search.equals("s_name")'>
+				select rno, sid, s_category, s_name, s_price, s_image, s_content, s_sfile, s_ssfile
+					from(select rownum rno, sid, s_category, s_name, s_price, s_image, s_content, s_sfile, s_ssfile
+						from(select * from myjeju_store order by sid desc) where s_name like '%'||#{search_text}||'%')
+						where rno between #{start} and #{end}
+				</when>
+				<otherwise>
+				select rno, sid, s_category, s_name, s_price, s_image, s_content, s_sfile, s_ssfile
+					from(select rownum rno, sid, s_category, s_name, s_price, s_image, s_content, s_sfile, s_ssfile
+						from(select * from myjeju_store order by sid desc) where s_category like '%'||#{search_text}||'%')
+						where rno between #{start} and #{end}
+				</otherwise>
+			</choose>
+		</select>
+		
+		<!-- 관리자 - 스토어 페이지 -->
+		<select id = "store_count" parameterType = "java.lang.Integer" resultType = "java.lang.Integer">
+			select count(num) from(select rownum num from myjeju_store) where num >=#{pageNumber}
+		</select>
+		
+		<!-- 관리자 - 스토어 검색 -->
+		<select id = "store_searchpage" parameterType = "java.util.Map" resultType = "java.lang.Integer">
+			<choose>
+				<when test='search.equals("s_name")'>
+				select count(num) from(select rownum num from myjeju_store where s_name like '%'||#{search_text}||'%') where num >= #{pageNumber}
+				</when>
+				<otherwise>
+				select count(num) from(select rownum num from myjeju_store where s_category like '%'||#{search_text}||'%') where num >= #{pageNumber}
+				</otherwise>
+			</choose>
+		</select>
+		
+		<!-- 스토어 상품 상세 화면 -->
+		<select id = "store_content" parameterType = "java.lang.String" resultType = "com.myjeju.vo.StoreVO">
+			select sid, s_category, s_name, s_price, s_image, s_content, s_sfile, s_ssfile
+				from myjeju_store where sid = #{sid}
+		</select>
+		
+		<!-- 파일 포함 업데이트 -->
+		<update id="store_update_file" parameterType="com.myjeju.vo.StoreVO">
+			update myjeju_store set s_category = #{s_category}, s_name = #{s_name}, s_price = #{s_price}, s_image = #{s_image}, s_content = #{s_content}, s_sfile = #{s_sfile}, s_ssfile = #{s_ssfile} where sid = #{sid}
+		</update>
+		
+		<!-- 파일 미포함 업데이트 -->
+		<update id="store_update_no_file" parameterType="com.myjeju.vo.StoreVO">
+			update myjeju_store set s_category = #{s_category}, s_name = #{s_name}, s_price = #{s_price} where sid = #{sid}
+		</update>
+		
+		<!-- 스토어 - 기존 파일 가져오기 -->
+		<select id="store_oldfile" parameterType="java.lang.String" resultType="java.lang.String">
+			select s_sfile, s_ssfile from myjeju_store where sid = #{sid}
+		</select>
+		
+		<!-- 스토어 상품 등록 -->
+		<insert id = "storeInsert" parameterType = "com.myjeju.vo.StoreVO">
+			insert into myjeju_store values('s_'||sequ_myjeju_store.nextval, #{s_category}, #{s_name}, #{s_price}, #{s_image}, #{s_content}, #{s_sfile}, #{s_ssfile}, 0, 0)
+		</insert>
+		
+		<!-- 스토어 상품 삭제 -->
+		<delete id="store_delete" parameterType="java.lang.String">
+			delete from myjeju_store where sid = #{sid}
+		</delete>	
+		
+	
+		
+</mapper>

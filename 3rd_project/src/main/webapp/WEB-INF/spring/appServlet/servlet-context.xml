@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<resources mapping="/resources/**" location="/resources/" />
+	<resources mapping="/images/**" location="/resources/images/" />
+	<resources mapping="/css/**" location="/resources/css/" />
+	<resources mapping="/js/**" location="/resources/js/" />
+	<resources mapping="/upload/**" location="/resources/upload/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	
+	<!-- multipartResolver -->
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	</beans:bean>
+	
+	<!-- DAO Object -->
+	<!-- <beans:bean id="accomodationDAO" class="com.myjeju.dao.AcoomodationDAO"></beans:bean>
+	<beans:bean id="foodDAO" class="com.myjeju.dao.FoodDAO"></beans:bean>
+	<beans:bean id="houseDAO" class="com.myjeju.dao.HouseDAO"></beans:bean>
+	<beans:bean id="indexDAO" class="com.myjeju.dao.IndexDAO"></beans:bean>		
+	<beans:bean id="payDAO" class="com.myjeju.dao.PayDAO"></beans:bean>-->
+	<beans:bean id="adminDAO" class="com.myjeju.dao.AdminDAO"></beans:bean>
+	<beans:bean id="HouseDAO" class="com.myjeju.dao.HouseDAO"></beans:bean>	
+	<beans:bean id="travelDAO" class="com.myjeju.dao.TravelDAO"></beans:bean> 
+	<beans:bean id="foodDAO" class="com.myjeju.dao.FoodDAO"></beans:bean>
+	<beans:bean id="cafeDAO" class="com.myjeju.dao.CafeDAO"></beans:bean>
+	<beans:bean id="reservationDAO" class="com.myjeju.dao.ReservationDAO"></beans:bean>
+	<beans:bean id="storeDAO" class="com.myjeju.dao.StoreDAO"></beans:bean>
+	<beans:bean id="stofaqDAO" class="com.myjeju.dao.StofaqDAO"></beans:bean>
+	<beans:bean id="storevDAO" class="com.myjeju.dao.StorevDAO"></beans:bean>
+	<beans:bean id="memberDAO" class="com.myjeju.dao.MemberDAO"></beans:bean>
+	<beans:bean id="mypageDAO" class="com.myjeju.dao.MypageDAO"></beans:bean>
+	<beans:bean id="basketDAO" class="com.myjeju.dao.BasketDAO"></beans:bean>
+	<beans:bean id="communityDAO" class="com.myjeju.dao.CommunityDAO"></beans:bean>
+	
+	<!-- Service Object -->
+	<!-- <beans:bean id="accomodationService" class="com.myjeju.service.AccomodationServiceImpl"></beans:bean>
+	<beans:bean id="foodService" class="com.myjeju.service.FoodServiceImpl"></beans:bean>
+	<beans:bean id="houseService" class="com.myjeju.service.HouseServiceImpl"></beans:bean>
+	<beans:bean id="indexService" class="com.myjeju.service.IndexServiceImpl"></beans:bean>-->
+	<beans:bean id="adminService" class="com.myjeju.service.AdminServiceImpl"></beans:bean>
+	<beans:bean id="houseService" class="com.myjeju.service.HouseServiceImpl"></beans:bean>	
+	<beans:bean id="travelService" class="com.myjeju.service.TravelServiceImpl"></beans:bean> 
+	<beans:bean id="foodService" class="com.myjeju.service.FoodServiceImpl"></beans:bean>
+	<beans:bean id="cafeService" class="com.myjeju.service.CafeServiceImpl"></beans:bean>
+	<beans:bean id="reservationService" class="com.myjeju.service.ReservationServiceImpl"></beans:bean>
+	<beans:bean id="storeService" class="com.myjeju.service.StoreServiceImpl"></beans:bean>
+	<beans:bean id="stofaqService" class="com.myjeju.service.StofaqServiceImpl"></beans:bean>
+	<beans:bean id="MessageService" class="com.myjeju.service.MessageServiceImpl"></beans:bean>
+	<beans:bean id="MemberService" class="com.myjeju.service.MemberServiceImpl"></beans:bean>
+	<beans:bean id="MypageService" class="com.myjeju.service.MypageServiceImpl"></beans:bean>
+	<beans:bean id="CommunityService" class="com.myjeju.service.CommunityServiceImpl"></beans:bean>
+	<beans:bean id="payService" class="com.myjeju.service.PayServiceImpl"></beans:bean>
+	<beans:bean id="NoticeService" class="com.myjeju.service.NoticeServiceImpl"></beans:bean>
+	
+	<!-- Interceptor Object -->
+	<beans:bean id="authInterceptor" class="com.myjeju.interceptor.AuthInterceptor"></beans:bean>
+	
+	<interceptors>
+		<interceptor>
+			<mapping path="/adminindex*"/>
+			<beans:ref bean="authInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/admember*"/>
+			<beans:ref bean="authInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/mypage*"/>
+			<beans:ref bean="authInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/myinfo*"/>
+			<beans:ref bean="authInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/myinfo_request*"/>
+			<beans:ref bean="authInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/myinfo_pass*"/>
+			<beans:ref bean="authInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/myinfo_out*"/>
+			<beans:ref bean="authInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/myorder*"/>
+			<beans:ref bean="authInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/mybasket*"/>
+			<beans:ref bean="authInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/myboard*"/>
+			<beans:ref bean="authInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/myreview*"/>
+			<beans:ref bean="authInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/myheart*"/>
+			<beans:ref bean="authInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/mypoint*"/>
+			<beans:ref bean="authInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/free_board_write*"/>
+			<beans:ref bean="authInterceptor"/>
+		</interceptor>
+				<interceptor>
+			<mapping path="/request_board_write*"/>
+			<beans:ref bean="authInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/calendar*"/>
+			<beans:ref bean="authInterceptor"/>
+		</interceptor>		
+	</interceptors>
+	
+	<context:component-scan base-package="com.myspring.myjeju" />
+	<context:component-scan base-package="com.myjeju.dao" />
+	 
+	
+	
+</beans:beans>

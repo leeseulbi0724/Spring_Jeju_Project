@@ -1,0 +1,138 @@
+@charset "utf-8";
+*{
+	margin:0; padding:0;	
+	font-family:"맑은고딕";
+}
+
+/**
+*	travel_content
+*/
+body {
+	margin: 0;
+}
+
+div.calendar_content{
+	margin:50px auto;
+	text-align:center;
+	width: 100%
+	
+}
+div.calendar_content>h3{
+	display:inline-block;
+	border-bottom:3px solid #4fa9de;
+	padding-bottom:5px;
+}
+div.calendar_content>h3.date{
+	display:inline-block;
+	border-bottom:3px solid #4fa9de;
+	padding:10px;
+}
+div.calendar_content>form{
+	display:inline-block;
+}
+div.calendar_content>form>button{
+	text-decoration: none;
+	padding:10px;
+	font-size: 22px;
+	color: black;
+	border : 2px solid rgba(0,0,0,0);
+	background-color : rgba(0,0,0,0);
+}
+
+section.calendar {
+	margin : 20px auto;
+	padding: 0;
+	font-size: 0px; 
+	letter-spacing: 0px;
+	word-spacing: 0px;
+	width: 90%;
+}
+
+section.calendar>div.day {
+	margin: 0;
+	padding-bottom: 20px;
+	display: inline-block;
+	width: 10%;
+	height: 20px;
+	font-size: 20px;
+	border-bottom: 1px solid rgba(0,0,0,0.2);
+	
+}
+section.calendar>div.days {
+	margin: 0;
+	padding: 0;
+	display: inline-block;
+	border-bottom: 1px solid rgba(0,0,0,0.2);
+	width: 10%;
+	height: 80px;
+	font-size: 15px;
+	text-align: center;
+	line-height: 80px;	
+}
+section.calendar>div.days_sun {
+	margin: 0;
+	padding: 0;
+	display: inline-block;
+	border-bottom: 1px solid rgba(0,0,0,0.2);
+	width: 10%;
+	height: 80px;
+	font-size: 15px;
+	text-align: center;
+	line-height: 80px;	
+	color: red;
+} 
+section.calendar>div.days_sat {
+	margin: 0;
+	padding: 0;
+	display: inline-block;
+	border-bottom: 1px solid rgba(0,0,0,0.2);
+	width: 10%;
+	height: 80px;
+	font-size: 15px;
+	text-align: center;
+	line-height: 80px;	
+	color: blue;
+}
+section.calendar>div:nth-child() {
+	color: red;
+	border : 2px solid red;
+}
+div.date {
+	font-size:20px;
+	font-weight: 700;
+	margin-top: 10px;
+}
+
+div.firstday , div.secondday{
+	display: inline-block;
+}
+
+form.search_form {
+	display: inline-block;
+	position:absolute;
+	left: 55.5%;
+}
+
+button.search_btn {
+	display: inline-block;	
+	border:1px solid #4fa9de;
+	background-color: #4fa9de;
+	color: white;
+	padding: 8px 10px;
+	border-radius: 15px;
+	font-size:15px;
+	position:relative;
+	bottom: 27px;
+	cursor:pointer;
+}
+
+
+
+
+
+
+
+
+
+
+

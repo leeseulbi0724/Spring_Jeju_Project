@@ -1,0 +1,48 @@
+@charset "UTF-8";
+	body { text-align:center; }
+	h3 { border-bottom:5px solid #4fa9de; display:inline-block; font-size:20px; margin:50px 0 20px 0; font-weight:bold; }
+	section {
+		width:100%;
+		text-align:center;
+	}
+	div.box { display:inline-block; margin-top:50px; width:800px; }
+	.content_box {
+		display:inline-block;
+		width:1000px;
+		background-color:white; 
+		text-align:center;
+		margin:50px 0;		
+	}
+	.content_box h3 { font-size:40px; font-family:HYHeadLine; padding:80px 800px 20px 0; }
+	.box p.info { float:right; font-size:15px; }
+	.date { color:gray; }
+	.date a { text-decoration:none; color:lightgray; margin-left:5px; }
+	.date a:hover { text-decoration:underline; cursor:pointer; }
+	.comment_box ul { list-style:none; display:inline-block; }
+	.comment_box ul li { display:inline-block; }
+	
+	table th { text-align:left; }
+	
+	#con_textarea { background-color:white; border:none; font-size:14px; }	
+	.comment_box { width:800px; border:1px solid lightgray; margin-top:70px; text-align:center; }
+	.comment_box div { display:inline-block; width:700px; }
+	.comment_box .com_box, .com_subbox { border-bottom:1px solid lightgray; margin-bottom:10px; text-align:left; }
+	.com_box, .com_subbox { font-size:13px; }
+	.com_subbox img { display:inline-block; float:left; }
+	.com_subbox .rebox { display:inline-block; width:650px; margin-left:10px; }
+	.com_box p:first-child, .com_subbox p:first-child { font-weight:bold; }
+	.com_box p, .com_subbox p { margin:5px 0; }
+	div.re_box { display:none; margin-left:10px; } 
+	#comment, #re_comment { width:630px; display:inline-block; font-size:14px; }
+	p.text { float:left; font-size:18px; display:inline-block; margin-left:10px; font-weight:bold; }
+	#list, #delete, #update { float:right; margin:0 5px; background-color:#4fa9de; border:none; color:white; font-size:13px; }
+	#ok{ margin:10px 5px; background-color:#4fa9de; border:none; color:white; font-size:13px; }
+	#list:hover { background-color:rgb(23,86,123); }
+	#up { display:inline-block; clear:left; float:right; font-size:13px; margin-top:15px; }
+	#re_up, #close { display:inline-block; float:right; font-size:13px; padding:0 15px; }
+	#close { margin-top:5px; }
+	#re_up { margin-top:-35px; }
+	
+	th.title { background-color:rgb(247,248,249); }
+	
+	.number { width:200px; display:inline-block; font-size:13px; height:30px; }

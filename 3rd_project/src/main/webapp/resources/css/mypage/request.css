@@ -1,0 +1,9 @@
+@charset "UTF-8";
+	section { margin:150px 0; text-align:center; }
+	section p { font-size:18px; }
+	section span { font-size:16px; }
+	.form-control { display:inline-block; width:300px; height:30px; margin-bottom:10px; }
+	
+	.btn { margin:5px; padding:2px 10px; }
+	#ok { background-color:#4fa9de; color:white; }
+	#ok:hover { background-color:rgb(23,86,123); }

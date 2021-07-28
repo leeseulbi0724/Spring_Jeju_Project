@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="mapper.community">
+
+	<!-- 자유게시판 글쓰기 -->
+	<insert id="free_write" parameterType="com.myjeju.vo.CommunityVO">
+	<choose>
+		<when test = "ffile == null">
+			insert into myjeju_free_board values('f_'||sequ_myjeju_free_board.nextval, #{id}, #{ftitle}, #{fcontent}, 0, null, null, sysdate )			
+		</when>
+		<otherwise>
+			insert into myjeju_free_board values('f_'||sequ_myjeju_free_board.nextval, #{id}, #{ftitle}, #{fcontent}, 0, #{ffile}, #{fsfile}, sysdate )
+		</otherwise>
+	</choose>
+	</insert>
+	
+	<!-- 자유게시판  총 게시글 수-->
+	<select id="free_total_count" resultType="java.lang.Integer">
+		select count(*) from myjeju_free_board
+	</select>
+	
+	<!-- 전체리스트 -->
+	<select id="free_list" parameterType="map" resultType="com.myjeju.vo.CommunityVO"  >
+	select rno, fid, id, ftitle, fhit, fdate 
+		from (select rownum rno, fid, id, ftitle, fhit, fdate 
+			from (select rownum rno, fid, id, ftitle, fhit, to_char(fdate, 'yyyy-mm-dd') fdate 
+				from (select fid, id, ftitle, fhit, fdate from myjeju_free_board order by fdate) order by rno)
+					order by rno desc) where rno between #{start} and #{end}
+	</select>
+	
+	<!-- 자유게시판 글 내용 가져오기 -->
+	<select id="free_content" parameterType="java.lang.String" resultType="com.myjeju.vo.CommunityVO">
+		select fid, id, ftitle, fcontent, fdate, ffile, fsfile from myjeju_free_board where fid=#{fid}
+	</select>
+	
+	<!-- 자유게시판 댓글달기 -->
+	<insert id="comment" parameterType="com.myjeju.vo.CommunityVO" >
+		insert into myjeju_free_comment values(#{fid}, 'c_'||sequ_myjeju_free_comment.nextval, #{comment_id}, #{ccomment}, sysdate )
+	</insert>
+	
+	<!-- 자유게시판 댓글가져오기 -->
+	<select id="free_comment" parameterType="java.lang.String" resultType="com.myjeju.vo.CommunityVO">
+		select rownum rno, id, cid, ccomment, cdate from myjeju_free_comment where fid=#{fid}	 order by cdate
+	</select>
+	
+	<!-- 기존 파일 가져오기 -->
+	<select id="file_result" parameterType="java.lang.String" resultType="java.lang.String">
+		select fsfile from myjeju_free_board where fid=#{fid}
+	</select>
+	
+	<!-- 파일 포함 업데이트 -->
+	<update id="yes_update" parameterType="com.myjeju.vo.CommunityVO">
+		update myjeju_free_board set ftitle=#{ftitle}, fcontent=#{fcontent}, ffile=#{ffile}, fsfile=#{fsfile} where fid=#{fid}
+	</update>
+	
+		<!-- 파일 포함 업데이트 -->
+	<update id="no_update" parameterType="com.myjeju.vo.CommunityVO">
+		update myjeju_free_board set ftitle=#{ftitle}, fcontent=#{fcontent} where fid=#{fid}
+	</update>
+	
+	<!-- 자유게시판 댓글 삭제하기 -->
+	<delete id="comment_delete" parameterType="java.lang.String">
+		delete from myjeju_free_comment where cid=#{cid}
+	</delete>
+	
+	<!-- 자유게시판 삭제하기 -->
+	<delete id="free_board_delete" parameterType="java.lang.String">
+		delete from myjeju_free_board where fid=#{fid}
+	</delete>
+	
+	<!-- 자유게시판 조회수 -->
+	<update id="hit" parameterType="java.lang.String">
+		update myjeju_free_board set fhit=fhit+1 where fid=#{fid}
+	</update>
+	
+	<!--  -->
+	
+	
+	
+	<!-- 요청게시판 글쓰기 -->
+	<insert id="request_write" parameterType="com.myjeju.vo.CommunityVO">
+	<choose>
+		<when test = "rfile == null">
+			insert into myjeju_request_board 
+				values('r_'||sequ_myjeju_request_board.nextval, #{id}, #{rcategory}, #{rtitle}, #{rcontent}, null, null, #{rnumber}, sysdate )			
+		</when>
+		<otherwise>
+			insert into myjeju_request_board 
+				values('r_'||sequ_myjeju_request_board.nextval, #{id}, #{rcategory}, #{rtitle}, #{rcontent}, #{rfile}, #{rsfile}, #{rnumber}, sysdate )	
+		</otherwise>
+	</choose>
+	</insert>
+	
+	<!-- 요청게시판  총 게시글 수-->
+	<select id="request_total_count" resultType="java.lang.Integer">
+		select count(*) from myjeju_request_board
+	</select>
+	
+	<!-- 전체리스트 -->
+	<select id="request_list" parameterType="map" resultType="com.myjeju.vo.CommunityVO"  >
+	select rno, rid, id, rtitle, rdate 
+		from (select rownum rno, rid, id, rtitle, rdate 
+			from (select rownum rno, rid, id, rtitle, to_char(rdate, 'yyyy-mm-dd') rdate 
+				from (select rid, id, rtitle, rdate from myjeju_request_board order by rdate) order by rno)
+					order by rno desc) where rno between #{start} and #{end}
+	</select>
+	
+	<!-- 비밀번호체크 -->
+	<select id="board_pass" parameterType="map"  resultType="java.lang.Integer">
+		select count(*) from myjeju_request_board where rid=#{rid} and rnumber=#{pass}
+	</select>
+	
+	<!-- 요청게시판 상세보기 -->
+	<select id="request_content" parameterType="java.lang.String" resultType="com.myjeju.vo.CommunityVO">
+		select rid, id, rcategory, rtitle, rcontent, rdate, rfile, rsfile from myjeju_request_board where rid=#{rid}
+	</select>
+	
+	<!-- 공지사항리스트 -->
+	<select id="notice_list" resultType="com.myjeju.vo.NoticeVO">
+		select nid, ntitle, to_char(ndate, 'yyyy-mm-dd') ndate, ncount from myjeju_notice order by ndate desc
+	</select>
+	
+	<update id="notice_count" parameterType="java.lang.String">
+		update myjeju_notice set ncount=ncount+1 where nid=#{nid}
+	</update>
+	
+</mapper>

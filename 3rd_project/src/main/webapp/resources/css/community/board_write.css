@@ -1,0 +1,15 @@
+@charset "UTF-8";
+	body { text-align:center;	}
+	h3 { border-bottom:5px solid #4fa9de; display:inline-block; font-size:20px; margin:50px 0; font-weight:bold; }
+	
+	.container { width:825px; }		
+	
+	.select { width:100px; display:inline-block; font-size:13px; float:left; margin-bottom:5px; }
+	
+	.input { width:800px; margin-bottom:5px; display:inline-block; font-size:13px; }
+	.textarea { width:800px; height:400px; margin-bottom:5px; display:inline-block; font-size:13px; }
+	
+	#list, #write { background-color:#4fa9de; border:none; color:white; font-size:13px; }
+	#write { float:right; }
+	#list { float:left; margin-bottom:50px; }
+	#list:hover, #write:hover { background-color:rgb(23,86,123); }

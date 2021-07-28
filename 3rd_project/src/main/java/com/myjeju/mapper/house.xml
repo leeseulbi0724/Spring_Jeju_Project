@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.house">
+	
+	<!-- 숙소리스트 -->
+	<select id="house_list" resultType="com.myjeju.vo.HouseVO">
+		select rno, hid, h_name, h_infor, h_infor2, h_tag, h_addr, h_vpoint, h_hpoint, h_hp, h_like, h_img,h_file,star_avg, review_count
+  			from(select rownum rno, hid, h_name, h_infor, h_infor2, h_tag, h_addr, h_vpoint, h_hpoint, h_hp, h_like, h_img,h_file,star_avg, review_count
+    		from(select hid, h_name, h_infor, h_infor2, h_tag, h_addr, h_vpoint, h_hpoint, h_hp, h_like, h_img,h_file,star_avg, review_count
+    		from myjeju_house order by h_like desc))
+	</select>
+	
+	<!-- 숙소 리스트 처리 -->
+	<select id="ajax_house_list_num" parameterType="map" resultType="com.myjeju.vo.HouseVO">
+		select rno, hid, h_name, h_infor, h_infor2, h_tag, h_addr, h_vpoint, h_hpoint, h_hp, h_like, h_img, h_file, star_avg, review_count
+			from(select rownum rno, hid, h_name, h_infor, h_infor2, h_tag, h_addr, h_vpoint, h_hpoint, h_hp, h_like, h_img,h_file,star_avg, review_count
+    		from(select hid, h_name, h_infor, h_infor2, h_tag, h_addr, h_vpoint, h_hpoint, h_hp, h_like, h_img, h_file, star_avg, review_count from myjeju_house order by h_like desc)) 
+    		where rno between #{start} and #{end}
+	</select>
+	
+	<!-- 숙소 리스트 검색 처리 -->
+	<select id="ajax_house_list_search" parameterType="java.util.Map" resultType="com.myjeju.vo.HouseVO">
+		<choose>
+			<when test="search.equals('h_name')">
+				select rno, hid, h_name, h_infor, h_infor2, h_tag, h_addr, h_vpoint, h_hpoint, h_hp, h_like, h_img, h_file,star_avg, review_count
+					from(select rownum rno, hid, h_name, h_infor, h_infor2, h_tag, h_addr, h_vpoint, h_hpoint, h_hp, h_like,h_img, h_file, star_avg, review_count
+	    			from(select hid, h_name, h_infor, h_infor2, h_tag, h_addr, h_vpoint, h_hpoint, h_hp, h_like, h_img,h_file,star_avg, review_count from myjeju_house order by h_like desc)
+	    			where h_name like '%'||#{search_text}||'%') 
+	    			where rno between #{start} and #{end}
+			</when>
+			<when test="search.equals('h_addr')">
+				select rno, hid, h_name, h_infor, h_infor2, h_tag, h_addr, h_vpoint, h_hpoint, h_hp, h_like, h_img, h_file, star_avg, review_count
+					from(select rownum rno, hid, h_name, h_infor, h_infor2, h_tag, h_addr, h_vpoint, h_hpoint, h_hp, h_like, h_img, h_file,star_avg, review_count
+	    			from(select hid, h_name, h_infor, h_infor2, h_tag, h_addr, h_vpoint, h_hpoint, h_hp, h_like, h_img,h_file,star_avg, review_count from myjeju_house order by h_like desc)
+	    			where h_addr like '%'||#{search_text}||'%') 
+	    			where rno between #{start} and #{end}
+			</when>
+		</choose>
+	</select>
+	
+	<!-- 숙소 상위 3개 -->
+	<select id="house_top3" resultType="com.myjeju.vo.HouseVO">
+		<![CDATA[ select rno, hid, h_name, h_tag, h_infor, h_like, h_img, h_file, email, star_avg, review_count
+					  from (select rownum rno, hid, h_name, h_tag, h_infor, h_like, h_img, h_file, email,star_avg, review_count
+					    from (select hid, h_name, h_tag, h_infor, h_like, h_img,h_file, email,star_avg, review_count
+					      from myjeju_house order by h_like desc) order by rno) where rno <=3 ]]>
+	</select>
+	
+	<!-- 숙소 상세 정보 -->
+	<select id="house_detail" parameterType="java.lang.String" resultType="com.myjeju.vo.HouseVO">
+		select hid, h_name, h_tag, h_infor, h_infor2, h_addr, h_hp, h_like, h_img, h_file, email, star_avg, review_count from myjeju_house where hid = #{hid}
+	</select>
+	
+	<!-- 숙소 객실 정보 -->
+	<select id="room_detail" parameterType="java.lang.String" resultType="com.myjeju.vo.HDetailVO">
+		select hd_name, hd_price, hd_people, hd_img, hd_file, hdid, hid from myjeju_hdetail where hid = #{hid}
+	</select>
+	
+	<!-- 하트 테이블 + -->
+	<insert id="heart_plus" parameterType="com.myjeju.vo.HeartVO">
+		insert into myjeju_h_heart values(#{id}, #{hid})
+	</insert>
+
+	<!-- 하트 테이블 - -->
+	<insert id="heart_minus" parameterType="com.myjeju.vo.HeartVO">
+		delete from myjeju_h_heart where id=#{id} and hid=#{hid}
+	</insert>
+	
+	<!-- 하트정보가져오기 -->
+	<select id="hearrt_info_result" parameterType="com.myjeju.vo.HeartVO" resultType="java.lang.Integer">
+		select count(*) from myjeju_h_heart where id=#{id} and hid=#{hid}
+	</select>
+	
+	<!-- 숙소 테이블에 하트 추가 -->
+	<update id="updateheart" parameterType="java.lang.String" >
+		update myjeju_house set h_like = h_like+1 where hid=#{hid}
+	</update>
+	
+	<!-- 숙소 테이블에 하트 마이너스 -->
+	<update id="updateminusheart" parameterType="java.lang.String" >
+		update myjeju_house set h_like = h_like-1 where hid=#{hid}
+	</update>
+	
+	<!-- 리뷰 쓰기 -->
+	<insert id="insert_review" parameterType="com.myjeju.vo.HouseReviewVO">
+		insert into myjeju_house_review values('re_'||sequ_myjeju_house_review.nextval, #{hid}, #{id}, #{h_review}, #{h_star}, sysdate)
+	</insert>
+	
+	<!-- 리뷰 리스트 -->
+	<select id="review_list" resultType="com.myjeju.vo.HouseReviewVO">
+		select rno, reid, id, hid, h_review, h_star, h_time
+ 		 from(select rownum rno,  reid, id, hid, h_review, h_star, h_time
+  		  from(select rownum rno,  reid, id, hid, h_review, h_star, to_char(h_time, 'yyyy-mm-dd') h_time
+   		   from(select reid, id, hid, h_review, h_star, h_time from myjeju_house_review order by h_time) order by rno)
+   		    order by rno desc) where hid=#{hid}
+	</select>
+	
+	<!-- 리뷰 리스트 처리-->
+	<select id="ajax_review_list" parameterType="map" resultType="com.myjeju.vo.HouseReviewVO">
+		select rno, reid, id, hid, h_review, h_star, h_time
+  		 from(select rownum rno, reid, id, hid, h_review, h_star, h_time
+ 		  from(select rownum rno,  reid, id, hid, h_review, h_star, h_time
+  		   from(select rownum rno,  reid, id, hid, h_review, h_star, to_char(h_time, 'yyyy-mm-dd') h_time
+   		    from(select reid, id, hid, h_review, h_star, h_time from myjeju_house_review order by h_time) order by rno)
+   		     order by rno desc) where hid=#{hid}) where rno between #{start} and #{end}
+	</select>
+	
+	<!-- 리뷰 삭제 -->
+	<delete id="delete_review" parameterType="com.myjeju.vo.HouseReviewVO">
+		delete from myjeju_house_review where reid = #{reid}
+	</delete>
+	
+	<!-- 별점 업데이트 -->
+	<update id="star_avg_update" parameterType = "java.lang.String">
+		update myjeju_house set star_avg = 
+		( select round(avg(h_star),1) 
+		  from myjeju_house_review hr
+		  join myjeju_house h on(hr.hid = h.hid)
+		  where h.hid = (select hid from myjeju_house where hid=#{hid})
+		)
+		where hid = (select hid from myjeju_house where hid=#{hid})
+	</update>
+	
+	<!-- 리뷰 카운트 업데이트 -->
+	<update id="review_count_update" parameterType = "java.lang.String">
+		update myjeju_house set review_count = 
+		( select count(h_review)
+		  from myjeju_house_review hr
+		  join myjeju_house h on(hr.hid = h.hid)
+		  where h.hid = (select hid from myjeju_house where hid=#{hid})
+		)
+		where hid = (select hid from myjeju_house where hid=#{hid})
+	</update>
+</mapper>

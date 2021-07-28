@@ -1,0 +1,39 @@
+@charset "utf-8";
+*{
+	margin:0; padding:0;	
+	font-family:"맑은고딕";
+}
+
+/**
+*	travel_content
+*/
+body {
+	margin: 0;
+}
+section.reservationDetail {
+	width: 60%;
+	margin: 0 auto;
+	margin-top: 100px;
+	text-align: center;
+}
+div.content>h3{
+	display:inline-block;
+	border-bottom:3px solid #4fa9de;
+	padding-bottom:5px;
+}
+div.subname {
+	font-size: 20px;
+	margin: 80px;
+	margin-bottom: 110px;
+}
+
+button.search_btn {
+	border:1px solid #4fa9de;
+	background-color: #4fa9de;
+	color: white;
+	width: 150px;
+	height: 45px;
+	border-radius: 15px;
+	font-size:16px;
+	cursor:pointer;
+}

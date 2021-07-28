@@ -1,0 +1,186 @@
+@charset "utf-8";
+*{
+	margin:0; padding:0;	
+	font-family:"맑은고딕";
+}
+
+/**
+*	travel_content
+*/
+body {
+	margin: 0;
+}
+section.reservationDetail {
+	width: 60%;
+	margin: 0 auto;
+	margin-top: 140px;
+	text-align: center;
+}
+div.carosel {
+	height: 500px;
+	background-color: #1c1b1f;
+}
+div.carousel-inner {
+	height: 500px;
+	width: 80%;
+	margin: 0 auto;
+}
+div.carousel-item{
+	height: 500px;
+}
+div.carousel-item>img{
+	height: 500px;
+}
+a.carousel-control-prev>span {
+	border: 1px soild red;
+	margin-right: 50px;
+	padding: 15px;
+}
+a.carousel-control-next>span {
+	border: 1px soild red;
+	margin-left: 50px;
+	padding: 15px;
+}
+
+div.reservation_content>h3{
+	display:inline-block;
+	border-bottom:3px solid #4fa9de;
+	padding-bottom:5px;
+}
+div.reservation_content>h3.date{
+	display:inline-block;
+	border-bottom:3px solid #4fa9de;
+	padding:10px;
+}
+div.reservation_content>form{
+	display:inline-block;
+}
+div.reservation_content>form>button{
+	text-decoration: none;
+	padding:10px;
+	font-size: 22px;
+	color: black;
+	border : 2px solid rgba(0,0,0,0);
+	background-color : rgba(0,0,0,0);
+}
+div.content {
+	width : 100%;
+	margin : 0 auto;
+}
+div.name_section {
+	border : 1px solid #4fa9de;
+	background-color : #4fa9de;
+	color : white;
+	height: 120px;
+	margin-bottom: 2px;
+}
+div.name {
+	font-size: 30px;
+	margin-top : 20px;
+}
+div.subname {
+	font-size: 20px;
+}
+
+div.text_section {
+	width : 100%;
+	line-height: 100%;
+	background-color: #f1f1f2;
+	padding: 30px 0;
+	margin: 4px 0;
+	text-align: center;
+	height: 180px;
+}
+div.namesection2 {
+	height: 30px;
+}
+div.name2 {
+	font-size: 30px;
+	font-family: "한컴바탕";
+	display: inline-block;
+	float: left;
+	margin-left: 20px;
+}
+div.subname2 {
+	font-size: 20px;
+	font-family: "한컴바탕";
+	display: inline-block;
+	float: left;
+	margin-left: 10px;
+}
+div.explain {
+	clear: both;
+	display: block;
+	margin : 0 auto;
+	margin-bottom: 10px;
+	font-size: 17px;
+	float: left;
+	margin: 5px 0;
+	margin-left: 20px;
+}
+div.date{
+	clear: both;
+	float: left;
+	margin: 10px 0;
+	margin-left: 20px;
+	
+}
+div.f_day { 
+	display: inline-block;
+}
+div.s_day { 
+	display: inline-block;
+}
+div.price_section{
+	clear: both;
+	float: left;
+	margin-left: 20px;
+}
+div.price_section>div {
+	display: inline-block;
+	float: left;
+	line-height: 100%;
+}
+div.price {
+	font-size: 25px;
+	font-weight: 700;	
+	color: red;
+}
+div.seperate {
+	height: 20px;
+	width: 1px;
+	background-color: lightgray;
+	margin: 0 10px;
+	position: relative;
+	top: 3px;
+}
+div.price_cal, div.x, div.night {
+	position: relative;
+	top: 4px;
+	color: #0080ff;
+}
+div.x {
+	margin: 0 10px;
+}
+
+
+button.search_btn {
+	border:1px solid #4fa9de;
+	background-color: #4fa9de;
+	color: white;
+	width: 150px;
+	height: 45px;
+	border-radius: 15px;
+	font-size:16px;
+	cursor:pointer;
+}
+
+div.text_section>form {
+	display: inline_block;
+	width: 160px;
+	height: 200px;
+	float: right;
+	position: relative;
+	bottom: 5px;
+	right: 15px;
+}

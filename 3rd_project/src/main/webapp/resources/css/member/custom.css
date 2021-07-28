@@ -1,0 +1,335 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=Noto+Sans+KR:wght@100;300;400;500&display=swap');
+* {
+	font-family: 'Nanum Gothic', sans-serif;
+}
+h5 {
+	font-family: 'Noto Sans KR', sans-serif;
+	font-size: 15px;
+}
+h4 {
+	font-family: 'Noto Sans KR', sans-serif;
+}
+h3 {
+	font-family: 'Noto Sans KR', sans-serif;
+		border-bottom:3px solid #4fa9de; 
+		font-size:25px; 
+		font-weight:bold; 
+		margin:0 auto;
+		padding-bottom:5px;
+}
+h2 {
+	font-family: 'Noto Sans KR', sans-serif;
+}
+h1 {
+	font-family: 'Noto Sans KR', sans-serif;
+}
+thead th {
+	background-color: #006DCC;
+	color: white;
+	text-align: center;
+}
+tr td:first-child,
+tr td:last-child {
+	border-top-right-radius: 6px;
+	border-bottom-left-radius: 6px;
+}
+tr td:first-child,
+tr td:last-child {
+	border-top-right-radius: 6px;
+	border-bottom-right-radius: 6px;
+}
+.vertical-alignment-helper {
+	display: table;
+	height: 100%;
+	width: 100%;
+	pointer-events: none;
+}
+.vertical-align-center {
+	display: table-cell;
+	vertical-align: middle;
+	pointer-events: none;
+}
+.modal-content {
+	width: inherit;
+	height: inherit;
+	margin: 0 auto;
+	pointer-events: all;
+}                
+
+.portlet {
+    margin-bottom: 15px;
+}
+
+.btn-white {
+    border-color: #cccccc;
+    color: #333333;
+    background-color: #ffffff;
+}
+
+.portlet {
+    border: 1px solid;
+}
+
+.portlet .portlet-heading {
+    padding: 0 15px;
+}
+
+.portlet .portlet-heading h4 {
+    padding: 1px 0;
+    font-size: 16px;
+}
+
+.portlet .portlet-heading a {
+    color: #fff;
+}
+
+.portlet .portlet-heading a:hover,
+.portlet .portlet-heading a:active,
+.portlet .portlet-heading a:focus {
+    outline: none;
+}
+
+.portlet .portlet-widgets .dropdown-menu a {
+    color: #333;
+}
+
+.portlet .portlet-widgets ul.dropdown-menu {
+    min-width: 0;
+}
+
+.portlet .portlet-heading .portlet-title {
+    float: left;
+}
+
+.portlet .portlet-heading .portlet-title h4 {
+    margin: 10px 0;
+}
+
+.portlet .portlet-heading .portlet-widgets {
+    float: right;
+    margin: 8px 0;
+}
+
+.portlet .portlet-heading .portlet-widgets .tabbed-portlets {
+    display: inline;
+}
+
+.portlet .portlet-heading .portlet-widgets .divider {
+    margin: 0 5px;
+}
+
+.portlet .portlet-body {
+    padding: 15px;
+    background: #fff;
+}
+
+.portlet .portlet-footer {
+    padding: 10px 15px;
+    background: #e0e7e8;
+}
+
+.portlet .portlet-footer ul {
+    margin: 0;
+}
+
+.portlet-green,
+.portlet-green>.portlet-heading {
+    border-color: #16a085;
+}
+
+.portlet-green>.portlet-heading {
+    color: #fff;
+    background-color: #16a085;
+}
+
+.portlet-orange,
+.portlet-orange>.portlet-heading {
+    border-color: #f39c12;
+}
+
+.portlet-orange>.portlet-heading {
+    color: #fff;
+    background-color: #f39c12;
+}
+
+.portlet-blue,
+.portlet-blue>.portlet-heading {
+    border-color: #2980b9;
+}
+
+.portlet-blue>.portlet-heading {
+    color: #fff;
+    background-color: #2980b9;
+}
+
+.portlet-red,
+.portlet-red>.portlet-heading {
+    border-color: #e74c3c;
+}
+
+.portlet-red>.portlet-heading {
+    color: #fff;
+    background-color: #e74c3c;
+}
+
+.portlet-purple,
+.portlet-purple>.portlet-heading {
+    border-color: #8e44ad;
+}
+
+.portlet-purple>.portlet-heading {
+    color: #fff;
+    background-color: #8e44ad;
+}
+
+.portlet-default,
+.portlet-dark-blue,
+.portlet-default>.portlet-heading,
+.portlet-dark-blue>.portlet-heading {
+    border-color: #34495e;
+}
+
+.portlet-default>.portlet-heading,
+.portlet-dark-blue>.portlet-heading {
+    color: #fff;
+    background-color: #34495e;
+}
+
+.portlet-basic,
+.portlet-basic>.portlet-heading {
+    border-color: #333;
+}
+
+.portlet-basic>.portlet-heading {
+    border-bottom: 1px solid #333;
+    color: #333;
+    background-color: #fff;
+}
+
+@media(min-width:768px) {
+    .portlet {
+        margin-bottom: 30px;
+    }
+}
+
+.img-chat{
+width:40px;
+height:40px;
+}
+
+.text-green {
+    color: #16a085;
+}
+
+.text-orange {
+    color: #f39c12;
+}
+
+.text-red {
+    color: #e74c3c;
+}  
+a {
+	color: #000000;
+	text-decoration: none;
+}
+a:hover {
+	color: #bbbbbb;
+	text-decoration: none;
+	cursor: pointer;
+}                        
+/* �꽕鍮꾧쾶�씠�뀡�쁺�뿭 */
+.navbar-default { /* �꽕鍮꾧쾶�씠�뀡 諛� 諛곌꼍 �깋�긽*/
+	background-color: #006DCC;
+	border-color: #006DCC;
+	border-bottom-color: #dddddd;
+	border-bottom-width: 3px;
+	border-radius: 0px;
+}
+.navbar-default .navbar-brand {/* �꽕鍮꾧쾶�씠�뀡 �젣紐� �깋�긽 */
+	color: #ffffff;
+	padding-top: 25px;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {/*�꽕鍮꾧쾶�씠�뀡 �젣紐⑹뿉 留덉슦�뒪瑜� �삱�졇�쓣�븣 */
+	color: #dddddd;
+	background-color: transparent;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus { /*�꽑�깮�맂 �궡鍮꾧쾶�씠�뀡 留덉슦�뒪 �깋�긽 �씠踰ㅽ듃*/
+	color: #ffffff;
+	background-color: #1456b8;
+}
+.navbar-default .navbar-nav > li > a {
+	color: white;
+	font-family: 'Noto Sans KR';
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+	color: #dddddd;
+}
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus { 
+	color: #006DCC;
+	text-decoration: none;
+	background-color: #ffffff;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+	background-color: #145688;
+}
+.navbar-default .navbar-toggle .icon-bar {
+	background-color: #dddddd;
+}                   
+@media (max-width: 767px) {
+	.navbar-default .navbar-nav .open .dropdown-menu > li > a {
+		color: #ffffff;
+	}
+	.navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+	.navbar-default .navbar-nav .open .dropdown-menu > li > a:focus
+	{
+		color: #eeeeee;
+	}
+}                       
+.navbar-fixed-top {
+	min-height: 70px;
+}                      
+.navbar-nav > li > a {
+	padding-top: 0px;
+	padding-bottom: 0px;
+	line-height: 70px; 
+} 
+@media (max-width: 767px) {
+	.navbar-default .navbar-brand {
+		padding-top: 15px;
+	}
+	.navbar-nav > li > a {
+		padding-top: 0px;
+		padding-bottom: 0px;
+		line-height: 40px;
+	}
+}                       
+.btn-file {
+	position: relative;
+	overflow: hidden;
+}                      
+.btn-file input[type=file] {
+	position: absolute;
+	top: 0;
+	right: 0;
+	min-width: 100%;
+	min-height: 100%;
+	font-size: 100px;
+	text-align: right;
+	filter: alpha(opacity=0);
+	opacity: 0;
+	outline: none;
+	background: white;
+	cursor: inherit;
+	display: block;
+}
+.file {
+	visibility: hidden;
+	position: absolute;
+}

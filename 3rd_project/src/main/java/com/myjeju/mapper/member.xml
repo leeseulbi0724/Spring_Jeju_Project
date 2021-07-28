@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="mapper.member">
+
+ 		<!-- 회원가입 -->
+ 		<insert id="join" parameterType="com.myjeju.vo.MemberVO">
+			insert into myjeju_member values (#{id},#{pass},#{name},#{birth},#{email},#{hp},#{addr1},#{addr2},0,sysdate)		
+		</insert>
+		
+		<!-- 로그인 -->
+		<select id="login" parameterType="com.myjeju.vo.MemberVO"   resultType="java.lang.Integer">
+			select count(*) from myjeju_member where id=#{id} and pass=#{pass}
+		</select>
+		
+		<!-- 아이디찾기 -->
+		<select id="id_search" parameterType="com.myjeju.vo.MemberVO"   resultType="java.lang.String">
+			select id from myjeju_member where name=#{name} and email=#{email} and hp=#{hp}
+		</select>
+		
+		<!-- 패스워드찾기 -->
+		<select id="pass_search" parameterType="com.myjeju.vo.MemberVO"   resultType="java.lang.String">
+			select id from myjeju_member where id =#{id} and name=#{name} and email=#{email} and hp=#{hp}
+		</select>
+		
+		<!-- 패스워드 변경 -->
+ 		<update id="pass_update" parameterType="com.myjeju.vo.MemberVO">
+			update myjeju_member set pass=#{pass} where id=#{id}		
+		</update>
+		
+		<!-- 아이디 중복확인 -->
+		<select id="id_check" parameterType="java.lang.String"   resultType="java.lang.Integer">
+			select count(*) from myjeju_member where id =#{id}
+		</select>
+		
+		<!-- 포인트 -->
+		<select id="point" parameterType="java.lang.String" resultType="java.lang.Integer">
+			select point from myjeju_member where id=#{id}
+		</select>
+		
+		
+
+</mapper>

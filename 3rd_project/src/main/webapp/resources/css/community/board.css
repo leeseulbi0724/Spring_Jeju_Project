@@ -1,0 +1,30 @@
+@charset "UTF-8";
+	body { text-align:center;	}
+	h3 { border-bottom:5px solid #4fa9de; display:inline-block; font-size:20px; margin:50px 0; font-weight:bold; }
+	.container { width:1100px; font-size:13px;  }
+	.search { text-align:right; margin:20px 0; }
+	
+	.table tr:first-child th {   }
+	table th { font-size:16px;	}
+	td a { text-decoration:none; color:black; }
+	td:nth-child(2) { width:600px; text-align:left; }
+	
+	#select { width:100px; display:inline-block; height:35px; font-size:13px; border-radius:20px; }
+	#search_input { width:200px; display:inline-block; height:35px; font-size:13px; border-radius:10px; }
+	
+	#write { background-color:#4fa9de; float:left; margin-bottom:50px; }
+	#write:hover { background-color:rgb(23,86,123); }
+	#search, #write { font-size:13px; border:none;  }
+
+	.notice_tbody { font-size:14.5px; }
+	.notice_tbody tr { background-color:rgb(247,248,249); }
+	.notice_title { font-weight:bold; }
+	.noticeBtn {
+		background-color:rgb(109,171,239);
+		border:none;
+		font-size:13px;
+		border-radius:5px;
+		color:white;
+		cursor:default;
+		padding:5px 10px;
+	}

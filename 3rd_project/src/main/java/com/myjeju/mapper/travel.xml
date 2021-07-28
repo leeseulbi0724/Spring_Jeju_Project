@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="mapper.travel">
+
+	<!-- 지도 리스트 -->
+	<select id="map_list" resultType="com.myjeju.vo.TravelVO">
+		select t_vpoint, t_hpoint, t_name, t_addr, t_hp, t_image1 from myjeju_travel
+	</select>
+	
+	<!-- 여행지 전체 리스트 -->
+	<select id="travel_list" resultType="com.myjeju.vo.TravelVO">
+		select rno, tid, t_name, t_tag, t_infor, t_infor2, t_addr, t_vpoint, t_hpoint, t_hp, t_like, t_file, t_sfile, star_avg, review_count
+  			from(select rownum rno, tid, t_name, t_tag, t_infor, t_infor2, t_addr, t_vpoint, t_hpoint, t_hp, t_like, t_file, t_sfile, star_avg, review_count
+    		from(select tid, t_name, t_tag, t_infor, t_infor2, t_addr, t_vpoint, t_hpoint, t_hp, t_like, t_file, t_sfile, star_avg, review_count
+    		from myjeju_travel order by t_like desc))
+	</select>
+	
+	<!-- 여행지 리스트 처리 -->
+	<select id="ajax_travel_list_num" parameterType="map" resultType="com.myjeju.vo.TravelVO">
+		select rno, tid, t_name, t_tag, t_infor, t_infor2, t_addr, t_vpoint, t_hpoint, t_hp, t_like, t_file, t_sfile, star_avg, review_count
+			from(select rownum rno, tid, t_name, t_tag, t_infor, t_infor2, t_addr, t_vpoint, t_hpoint, t_hp, t_like, t_file, t_sfile, star_avg, review_count
+    		from(select tid, t_name, t_tag, t_infor, t_infor2, t_addr, t_vpoint, t_hpoint, t_hp, t_like, t_file, t_sfile, star_avg, review_count from myjeju_travel order by t_like desc)) 
+    		where rno between #{start} and #{end}
+	</select>
+	
+	<!-- 여행지 리스트 검색 처리 -->
+	<select id="ajax_travel_list_search" parameterType="java.util.Map" resultType="com.myjeju.vo.TravelVO">
+		<choose>
+			<when test="search.equals('t_name')">
+				select rno, tid, t_name, t_tag, t_infor, t_infor2, t_addr, t_vpoint, t_hpoint, t_hp, t_like, t_file, t_sfile, star_avg, review_count
+					from(select rownum rno, tid, t_name, t_tag, t_infor, t_infor2, t_addr, t_vpoint, t_hpoint, t_hp, t_like, t_file, t_sfile, star_avg, review_count
+	    			from(select tid, t_name, t_tag, t_infor, t_infor2, t_addr, t_vpoint, t_hpoint, t_hp, t_like, t_file, t_sfile, star_avg, review_count from myjeju_travel order by t_like desc)
+	    			where t_name like '%'||#{search_text}||'%') 
+	    			where rno between #{start} and #{end}
+			</when>
+			<when test="search.equals('t_addr')">
+				select rno, tid, t_name, t_tag, t_infor, t_infor2, t_addr, t_vpoint, t_hpoint, t_hp, t_like, t_file, t_sfile, star_avg, review_count
+					from(select rownum rno, tid, t_name, t_tag, t_infor, t_infor2, t_addr, t_vpoint, t_hpoint, t_hp, t_like, t_file, t_sfile, star_avg, review_count
+	    			from(select tid, t_name, t_tag, t_infor, t_infor2, t_addr, t_vpoint, t_hpoint, t_hp, t_like, t_file, t_sfile, star_avg, review_count from myjeju_travel order by t_like desc)
+	    			where t_addr like '%'||#{search_text}||'%') 
+	    			where rno between #{start} and #{end}
+			</when>
+		</choose>
+	</select>
+	
+	<!-- 여행지 상위3 -->
+	<select id="travel_top3" resultType="com.myjeju.vo.TravelVO">
+		<![CDATA[	select rno, tid, t_name, t_tag, t_infor, t_like, t_file, t_sfile, star_avg, review_count
+					  from (select rownum rno, tid, t_name, t_tag, t_infor, t_like, t_file, t_sfile, star_avg, review_count
+					    from (select tid, t_name, t_tag, t_infor, t_like, t_file, t_sfile, star_avg, review_count
+					      from myjeju_travel order by t_like desc) order by rno) where rno <=3	]]>
+	</select>
+	
+	<!-- 여행지 상세 정보 -->
+	<select id="travel_detail" parameterType="java.lang.String" resultType="com.myjeju.vo.TravelVO">
+		select tid, t_name, t_tag, t_infor, t_infor2, t_addr, t_hp, t_like, t_file, t_sfile, star_avg, review_count
+			   from myjeju_travel where tid=#{tid}
+	</select>
+	
+	<!-- 포토 스팟 -->
+	<select id="photo_spot" parameterType="java.lang.String" resultType="com.myjeju.vo.PhotoSpotVO">
+		select myjeju_travel.t_name, myjeju_photo_spot.tid, myjeju_photo_spot.ps_name, myjeju_photo_spot.ps_infor, 
+			   myjeju_photo_spot.ps_psfile, myjeju_photo_spot.ps_pssfile
+		from myjeju_travel, myjeju_photo_spot 
+		where myjeju_travel.tid = myjeju_photo_spot.tid and myjeju_travel.tid=#{tid}
+	</select>
+	
+	<!-- 차박 스팟 -->
+	<select id="car_spot" parameterType="java.lang.String" resultType="com.myjeju.vo.CarSpotVO">
+		select myjeju_travel.t_name, myjeju_car_spot.tid, myjeju_car_spot.cs_name, myjeju_car_spot.cs_infor, 
+			   myjeju_car_spot.cs_csfile,myjeju_car_spot.cs_cssfile
+		from myjeju_travel, myjeju_car_spot 
+		where myjeju_travel.tid = myjeju_car_spot.tid and myjeju_travel.tid=#{tid}
+	</select>
+	
+	
+	<!-- 리뷰 쓰기 -->
+	<insert id="insert_review" parameterType="com.myjeju.vo.TravelReviewVO">
+		insert into myjeju_travel_review values('re_'||sequ_myjeju_travel_review.nextval, #{tid}, #{id}, #{t_review}, #{t_star}, sysdate)
+	</insert>
+	
+	<!-- 리뷰 리스트 -->
+	<select id="review_list" resultType="com.myjeju.vo.TravelReviewVO">
+		select rno, reid, id, tid, t_review, t_star, t_time
+ 		 from(select rownum rno,  reid, id, tid, t_review, t_star, t_time
+  		  from(select rownum rno,  reid, id, tid, t_review, t_star, to_char(t_time, 'yyyy-mm-dd') t_time
+   		   from(select reid, id, tid, t_review, t_star, t_time from myjeju_travel_review order by t_time) order by rno)
+   		    order by rno desc) where tid=#{tid}
+	</select>
+	
+	<!-- 리뷰 리스트 처리-->
+	<select id="ajax_review_list" parameterType="map" resultType="com.myjeju.vo.TravelReviewVO">
+		select rno, reid, id, tid, t_review, t_star, t_time
+  		 from(select rownum rno, reid, id, tid, t_review, t_star, t_time
+ 		  from(select rownum rno,  reid, id, tid, t_review, t_star, t_time
+  		   from(select rownum rno,  reid, id, tid, t_review, t_star, to_char(t_time, 'yyyy-mm-dd') t_time
+   		    from(select reid, id, tid, t_review, t_star, t_time from myjeju_travel_review order by t_time) order by rno)
+   		     order by rno desc) where tid=#{tid}) where rno between #{start} and #{end}
+	</select>
+	
+	<!-- 리뷰 삭제 -->
+	<delete id="delete_review" parameterType="com.myjeju.vo.TravelReviewVO">
+		delete from myjeju_travel_review where reid = #{reid}
+	</delete>
+	
+	<!-- 리뷰 카운트 -->
+	<select id="review_count" parameterType = "java.lang.String" resultType = "java.lang.Integer">
+		select count(*) t_review from myjeju_travel_review where tid=#{tid}
+	</select>
+	
+	<!-- 리뷰 별점 -->
+	<select id="avg_star" parameterType = "java.lang.String" resultType = "java.lang.Integer">
+		select round(avg(t_star),1), count(*) from myjeju_travel_review where tid=#{tid}
+	</select>
+	
+	<!-- 별점 업데이트 -->
+	<update id="star_avg_update" parameterType = "java.lang.String">
+		update myjeju_travel set star_avg = 
+		( select round(avg(t_star),1) 
+		  from myjeju_travel_review tr
+		  join myjeju_travel t on(tr.tid = t.tid)
+		  where t.tid = (select tid from myjeju_travel where tid=#{tid})
+		)
+		where tid = (select tid from myjeju_travel where tid=#{tid})
+	</update>
+	
+	<!-- 리뷰 카운트 업데이트 -->
+	<update id="review_count_update" parameterType = "java.lang.String">
+		update myjeju_travel set review_count = 
+		( select count(t_review)
+		  from myjeju_travel_review tr
+		  join myjeju_travel t on(tr.tid = t.tid)
+		  where t.tid = (select tid from myjeju_travel where tid=#{tid})
+		)
+		where tid = (select tid from myjeju_travel where tid=#{tid})
+	</update>
+	
+	
+	<!-- 하트 테이블 + -->
+	<insert id="heart_plus" parameterType="com.myjeju.vo.HeartVO">
+		insert into myjeju_t_heart values(#{id}, #{tid})
+	</insert>
+
+	<!-- 하트 테이블 - -->
+	<insert id="heart_minus" parameterType="com.myjeju.vo.HeartVO">
+		delete from myjeju_t_heart where id=#{id} and tid=#{tid}
+	</insert>
+	
+	<!-- 하트정보가져오기 -->
+	<select id="hearrt_info_result" parameterType="com.myjeju.vo.HeartVO" resultType="java.lang.Integer">
+		select count(*) from myjeju_t_heart where id=#{id} and tid=#{tid}
+	</select>
+	
+	<!-- 여행지 테이블에 하트 추가 -->
+	<update id="updateheart" parameterType="java.lang.String" >
+		update myjeju_travel set t_like = t_like+1 where tid=#{tid}
+	</update>
+	
+	<!-- 여행지 테이블에 하트 마이너스 -->
+	<update id="updateminusheart" parameterType="java.lang.String" >
+		update myjeju_travel set t_like = t_like-1 where tid=#{tid}
+	</update>
+</mapper>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="mapper.store">
+
+	<!-- BEST MENU 3개 -->
+	<select id = "best3list" resultType = "com.myjeju.vo.StoreVO">
+		<![CDATA[ select rno, sid, s_category, s_name, s_price, s_image, s_sfile, s_content, s_ssfile, star_avg, star_count
+					  from (select rownum rno, sid, s_category, s_name, s_price, s_image, s_sfile, s_content, s_ssfile, star_avg, star_count
+					    from (select sid, s_category, s_name, s_price, s_image, s_sfile, s_content, s_ssfile, star_avg, star_count
+					      from myjeju_store order by star_avg desc) order by rno) where rno <=3 ]]>
+	</select>
+
+	<!-- EAT MENU 3개 -->
+	<select id = "eat3list" resultType = "com.myjeju.vo.StoreVO">
+		<![CDATA[ select rno, sid, s_category, s_name, s_price, s_image, s_sfile, s_content, s_ssfile, star_avg, star_count
+					  from (select rownum rno, sid, s_category, s_name, s_price, s_image, s_sfile, s_content, s_ssfile, star_avg, star_count
+					    from (select sid, s_category, s_name, s_price, s_image, s_sfile, s_content, s_ssfile, star_avg, star_count
+					      from myjeju_store where s_category = '식품' order by star_avg desc) order by rno) where rno <=3 ]]>
+	</select>
+	
+	<!-- EAT 화면 -->
+	<select id = "eatlist" resultType = "com.myjeju.vo.StoreVO">
+		select sid, s_category, s_name, s_price, s_image, s_sfile, s_content, s_ssfile, star_avg, star_count
+			from myjeju_store where s_category = '식품'
+	</select>
+
+	<!-- SOUVE MENU 3개 -->
+	<select id = "souve3list" resultType = "com.myjeju.vo.StoreVO">
+		<![CDATA[ select rno, sid, s_category, s_name, s_price, s_image, s_sfile, s_content, s_ssfile, star_avg, star_count
+					  from (select rownum rno, sid, s_category, s_name, s_price, s_image, s_sfile, s_content, s_ssfile, star_avg, star_count
+					    from (select sid, s_category, s_name, s_price, s_image, s_sfile, s_content, s_ssfile, star_avg, star_count
+					      from myjeju_store where s_category = '기념품' order by star_avg desc) order by rno) where rno <=3 ]]>
+	</select>
+	
+	<!-- SOUVE 화면 -->
+	<select id = "souvelist" resultType = "com.myjeju.vo.StoreVO">
+		select sid, s_category, s_name, s_price, s_image, s_sfile, s_content, s_ssfile, star_avg, star_count
+			from myjeju_store where s_category = '기념품'
+	</select>
+
+	<!-- ETC MENU 3개 -->
+	<select id = "etc3list" resultType = "com.myjeju.vo.StoreVO">
+		<![CDATA[ select rno, sid, s_category, s_name, s_price, s_image, s_sfile, s_content, s_ssfile, star_avg, star_count
+					  from (select rownum rno, sid, s_category, s_name, s_price, s_image, s_sfile, s_content, s_ssfile, star_avg, star_count
+					    from (select sid, s_category, s_name, s_price, s_image, s_sfile, s_content, s_ssfile, star_avg, star_count
+					      from myjeju_store where s_category = '잡화' order by star_avg desc) order by rno) where rno <=3 ]]>
+	</select>
+
+	<!-- ETC 화면 -->
+	<select id = "etclist" resultType = "com.myjeju.vo.StoreVO">
+		select sid, s_category, s_name, s_price, s_image, s_sfile, s_content, s_ssfile, star_avg, star_count
+			from myjeju_store where s_category = '잡화'
+	</select>
+
+	<!-- 스토어 상품 상세 화면 -->
+	<select id = "content" parameterType = "java.lang.String" resultType = "com.myjeju.vo.StoreVO">
+		select sid, s_category, s_name, s_price, s_image, s_content, s_sfile, s_ssfile, star_avg, star_count
+			from myjeju_store where sid = #{sid}
+	</select>
+
+
+
+	<!-- 스토어 상품평 입력 -->
+	<insert id = "storeReviewInsert" parameterType = "com.myjeju.vo.StorevVO">
+		insert into myjeju_storev values(#{sid}, #{id}, 'sr_'||sequ_myjeju_storev.nextval, #{sr_review}, #{sr_star}, sysdate)
+	</insert>
+	
+	<!-- 스토어 상품평 리스트 가져오기-->
+	<select id = "StoreReviewList" parameterType = "java.lang.String" resultType = "com.myjeju.vo.StorevVO">
+		select sid, id, srid, sr_review, sr_star, to_char(sr_time, 'YY-MM-DD HH24:MI:SS') sr_time from myjeju_storev where sid = #{sid} order by sr_time
+	</select>
+	
+	
+	<!-- 스토어 상품평 하나 가져오기 (수정 처리) -->
+	<select id = "reviewOne" parameterType = "java.lang.String" resultType = "com.myjeju.vo.StorevVO">
+		select sid, id, srid, sr_review, sr_star, to_char(sr_time, 'YY-MM-DD HH24:MI:SS') sr_time from myjeju_storev where srid = #{srid}
+	</select>
+
+	<!-- 스토어 상품평 삭제 -->
+	<delete id = "reviewDelete" parameterType = "com.myjeju.vo.StorevVO">
+		delete from myjeju_storev where srid = #{srid}
+	</delete>
+	
+	<!-- 스토어 상품평 수정 -->
+	<update id = "reviewUpdate" parameterType = "com.myjeju.vo.StorevVO">
+		update myjeju_storev set sr_review = #{sr_review}, sr_star = #{sr_star} where srid = #{srid}
+	</update>
+	
+	<!-- 스토어 상품평 하나만 -->
+	<select id = "reviewCount" parameterType = "java.lang.String" resultType = "int">
+		select count(*) from myjeju_storev where sid = #{sid}
+	</select>
+	
+
+	<!-- 스토어 상품평 별점 자동 update -->
+	<update id = "review_avg_update" parameterType = "java.lang.String">
+		update myjeju_store set 
+			star_avg = (
+			  select round(avg(sr_star), 1) star_avg
+			  from myjeju_storev re
+			  join myjeju_store s on(re.sid = s.sid)
+			  where s.sid = (select sid from myjeju_store where sid = #{sid})
+			  ),
+			star_count = (
+			  select count(*)
+			  from myjeju_storev re
+			  join myjeju_store s on (re.sid = s.sid)
+			  where s.sid = (select sid from myjeju_store where sid = #{sid})
+			  )
+			where sid = (select sid from myjeju_store where sid = #{sid})
+	</update>
+	
+	<!-- 주문여부확인 -->
+	<select id="order_result" parameterType="com.myjeju.vo.BasketVO" resultType="java.lang.Integer">
+		select count(*) from myjeju_order_sequ where id=#{id} and sid=#{sid}
+	</select>
+</mapper>    

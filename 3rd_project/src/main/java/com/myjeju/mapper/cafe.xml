@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="mapper.cafe">
+
+	<!-- 지도 리스트 -->
+	<select id="map_list" resultType="com.myjeju.vo.CafeVO">
+		select ca_vpoint, ca_hpoint, ca_name, ca_addr, ca_hp , ca_file, ca_sfile from myjeju_cafe
+	</select>
+	
+	<!-- 카페 전체 리스트 -->
+	<select id="cafe_list" resultType="com.myjeju.vo.CafeVO">
+		select rno, caid, ca_name, ca_tag, ca_infor, ca_infor2, ca_addr, ca_vpoint, ca_hpoint, ca_hp, ca_like, ca_file, ca_sfile, star_avg, review_count
+  			from(select rownum rno, caid, ca_name, ca_tag, ca_infor, ca_infor2, ca_addr, ca_vpoint, ca_hpoint, ca_hp, ca_like, ca_file, ca_sfile, star_avg, review_count
+    		from(select caid, ca_name, ca_tag, ca_infor, ca_infor2, ca_addr, ca_vpoint, ca_hpoint, ca_hp, ca_like, ca_file, ca_sfile, star_avg, review_count
+    		from myjeju_cafe order by ca_like desc))
+	</select>
+	
+	<!-- 카페 리스트 처리 -->
+	<select id="ajax_cafe_list_num" parameterType="map" resultType="com.myjeju.vo.CafeVO">
+		select rno, caid, ca_name, ca_tag, ca_infor, ca_infor2, ca_addr, ca_vpoint, ca_hpoint, ca_hp, ca_like, ca_file, ca_sfile, star_avg, review_count
+			from(select rownum rno, caid, ca_name, ca_tag, ca_infor, ca_infor2, ca_addr, ca_vpoint, ca_hpoint, ca_hp, ca_like, ca_file, ca_sfile, star_avg, review_count
+    		from(select caid, ca_name, ca_tag, ca_infor, ca_infor2, ca_addr, ca_vpoint, ca_hpoint, ca_hp, ca_like, ca_file, ca_sfile, star_avg, review_count from myjeju_cafe order by ca_like desc)) 
+    		where rno between #{start} and #{end}
+	</select>
+	
+	<!-- 카페 리스트 검색 처리 -->
+	<select id="ajax_cafe_list_search" parameterType="java.util.Map" resultType="com.myjeju.vo.CafeVO">
+		<choose>
+			<when test="search.equals('ca_name')">
+				select rno, caid, ca_name, ca_tag, ca_infor, ca_infor2, ca_addr, ca_vpoint, ca_hpoint, ca_hp, ca_like, ca_file, ca_sfile, star_avg, review_count
+					from(select rownum rno, caid, ca_name, ca_tag, ca_infor, ca_infor2, ca_addr, ca_vpoint, ca_hpoint, ca_hp, ca_like, ca_file, ca_sfile, star_avg, review_count
+	    			from(select caid, ca_name, ca_tag, ca_infor, ca_infor2, ca_addr, ca_vpoint, ca_hpoint, ca_hp, ca_like, ca_file, ca_sfile, star_avg, review_count from myjeju_cafe order by ca_like desc)
+	    			where ca_name like '%'||#{search_text}||'%') 
+	    			where rno between #{start} and #{end}
+			</when>
+			<when test="search.equals('ca_addr')">
+				select rno, caid, ca_name, ca_tag, ca_infor, ca_infor2, ca_addr, ca_vpoint, ca_hpoint, ca_hp, ca_like, ca_file, ca_sfile, star_avg, review_count
+					from(select rownum rno, caid, ca_name, ca_tag, ca_infor, ca_infor2, ca_addr, ca_vpoint, ca_hpoint, ca_hp, ca_like, ca_file, ca_sfile, star_avg, review_count
+	    			from(select caid, ca_name, ca_tag, ca_infor, ca_infor2, ca_addr, ca_vpoint, ca_hpoint, ca_hp, ca_like, ca_file, ca_sfile, star_avg, review_count from myjeju_cafe order by ca_like desc)
+	    			where ca_addr like '%'||#{search_text}||'%') 
+	    			where rno between #{start} and #{end}
+			</when>
+		</choose>
+	</select>
+	
+	<!-- 카페 상위3 -->
+	<select id="cafe_top3" resultType="com.myjeju.vo.CafeVO">
+		<![CDATA[ select rno, caid, ca_name, ca_tag, ca_infor, ca_like, ca_file, ca_sfile, star_avg, review_count
+					  from (select rownum rno, caid, ca_name, ca_tag, ca_infor, ca_like, ca_file, ca_sfile, star_avg, review_count
+					    from (select caid, ca_name, ca_tag, ca_infor, ca_like, ca_file, ca_sfile, star_avg, review_count
+					      from myjeju_cafe order by ca_like desc) order by rno) where rno <=3 ]]>
+	</select>
+	
+	<!-- 카페 상세 정보 -->
+	<select id="cafe_detail" parameterType="java.lang.String" resultType="com.myjeju.vo.CafeVO">
+		select caid, ca_name, ca_tag, ca_infor, ca_infor2, ca_addr, ca_hp, ca_like, ca_file, ca_sfile, star_avg, review_count
+			   from myjeju_cafe where caid=#{caid}
+	</select>
+	
+	
+	
+	<!-- 리뷰 쓰기 -->
+	<insert id="insert_review" parameterType="com.myjeju.vo.CafeReviewVO">
+		insert into myjeju_cafe_review values('re_'||sequ_myjeju_cafe_review.nextval, #{caid}, #{id}, #{ca_review}, #{ca_star}, sysdate)
+	</insert>
+	
+	<!-- 리뷰 리스트 -->
+	<select id="review_list" resultType="com.myjeju.vo.CafeReviewVO">
+		select rno, reid, id, caid, ca_review, ca_star, ca_time
+ 		 from(select rownum rno,  reid, id, caid, ca_review, ca_star, ca_time
+  		  from(select rownum rno,  reid, id, caid, ca_review, ca_star, to_char(ca_time, 'yyyy-mm-dd') ca_time
+   		   from(select reid, id, caid, ca_review, ca_star, ca_time from myjeju_cafe_review order by ca_time) order by rno)
+   		    order by rno desc) where caid=#{caid}
+	</select>
+	
+	<!-- 리뷰 리스트 처리-->
+	<select id="ajax_review_list" parameterType="map" resultType="com.myjeju.vo.CafeReviewVO">
+		select rno, reid, id, caid, ca_review, ca_star, ca_time
+  		 from(select rownum rno, reid, id, caid, ca_review, ca_star, ca_time
+ 		  from(select rownum rno,  reid, id, caid, ca_review, ca_star, ca_time
+  		   from(select rownum rno,  reid, id, caid, ca_review, ca_star, to_char(ca_time, 'yyyy-mm-dd') ca_time
+   		    from(select reid, id, caid, ca_review, ca_star, ca_time from myjeju_cafe_review order by ca_time) order by rno)
+   		     order by rno desc) where caid=#{caid}) where rno between #{start} and #{end}
+	</select>
+	
+	<!-- 리뷰 삭제 -->
+	<delete id="delete_review" parameterType="com.myjeju.vo.CafeReviewVO">
+		delete from myjeju_cafe_review where reid = #{reid}
+	</delete>
+	
+	<!-- 별점 업데이트 -->
+	<update id="star_avg_update" parameterType = "java.lang.String">
+		update myjeju_cafe set star_avg = 
+		( select round(avg(ca_star),1) 
+		  from myjeju_cafe_review car
+		  join myjeju_cafe ca on(car.caid = ca.caid)
+		  where ca.caid = (select caid from myjeju_cafe where caid=#{caid})
+		)
+		where caid = (select caid from myjeju_cafe where caid=#{caid})
+	</update>
+	
+	<!-- 리뷰 카운트 업데이트 -->
+	<update id="review_count_update" parameterType = "java.lang.String">
+		update myjeju_cafe set review_count = 
+		( select count(ca_review)
+		  from myjeju_cafe_review car
+		  join myjeju_cafe ca on(car.caid = ca.caid)
+		  where ca.caid = (select caid from myjeju_cafe where caid=#{caid})
+		)
+		where caid = (select caid from myjeju_cafe where caid=#{caid})
+	</update>
+	
+	<!-- 하트 테이블 + -->
+	<insert id="heart_plus" parameterType="com.myjeju.vo.HeartVO">
+		insert into myjeju_ca_heart values(#{id}, #{caid})
+	</insert>
+
+	<!-- 하트 테이블 - -->
+	<insert id="heart_minus" parameterType="com.myjeju.vo.HeartVO">
+		delete from myjeju_ca_heart where id=#{id} and caid=#{caid}
+	</insert>
+	
+	<!-- 하트정보가져오기 -->
+	<select id="hearrt_info_result" parameterType="com.myjeju.vo.HeartVO" resultType="java.lang.Integer">
+		select count(*) from myjeju_ca_heart where id=#{id} and caid=#{caid}
+	</select>
+	
+	<!-- 음식점 테이블에 하트 추가 -->
+	<update id="updateheart" parameterType="java.lang.String" >
+		update myjeju_cafe set ca_like = ca_like+1 where caid=#{caid}
+	</update>
+	
+	<!-- 음식점 테이블에 하트 마이너스 -->
+	<update id="updateminusheart" parameterType="java.lang.String" >
+		update myjeju_cafe set ca_like = ca_like-1 where caid=#{caid}
+	</update>
+</mapper>

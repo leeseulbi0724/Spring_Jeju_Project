@@ -1,0 +1,180 @@
+@charset "utf-8";
+*{
+	margin:0; padding:0;	
+	font-family:"맑은고딕";
+}
+
+.btn_style{
+	width:100px;
+	background-color:#4fa9de;
+	border:1px solid #4fa9de;
+	border-radius:10px;
+	padding:10px;
+	color:white;
+	font-size:15px;
+	font-weight:bold;
+	text-align:center;
+	margin-top:20px;
+	cursor:pointer;
+}
+.btn_style:hover{
+	background-color:#268ecc;
+	border:1px solid #268ecc;
+}
+.btn_style2{
+	width:100px;
+	background-color:white;
+	border:2px solid #4fa9de;
+	border-radius:10px;
+	padding:10px;
+	color:#4fa9de;
+	font-size:15px;
+	font-weight:bold;
+	text-align:center;
+	margin-top:20px;
+	cursor:pointer;
+}
+.btn_style2:hover{
+	background-color:#4fa9de;
+	color:white;
+}
+
+
+div.travel_content{
+	width:1000px;
+	margin:80px auto;
+	text-align:center;
+}
+div.travel_content>h3{
+	display:inline-block;
+	border-bottom:3px solid #4fa9de;
+	padding-bottom:5px;
+}
+
+/**
+*	recommend_zone
+*/
+section.recommend_zone{
+border:1px solid red;
+	text-align:left;
+	margin:50px 0;
+}
+div.food_title{
+	display:inline-block;
+	border-bottom:2px solid #4fa9de;
+	padding:0 5px 5px 5px;
+	font-size:17px;
+	font-weight:bold;
+}
+section.recommend_zone>div.food_spot{
+	text-align:center;
+	margin-top:30px;
+}
+section.recommend_zone>div.food_spot img{
+	border-radius:5px;
+}
+article.food_spot1{
+	display:inline-block;
+}
+article.food_spot2{
+	display:inline-block;
+	margin:0 10px;
+}
+article.food_spot3{
+	display:inline-block;
+}
+
+div.food_spot p{
+	text-align:left;
+	font-size:16px;
+	font-weight:bold;
+	margin-top:10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+*	map_zone
+*/
+section.map_zone{
+border:1px solid red;
+	text-align:left;
+	margin:50px 0;
+}
+
+
+
+
+
+
+
+
+/**
+*	list_zone
+*/
+section.list_zone{
+border:1px solid red;
+	text-align:left;
+	margin:50px 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

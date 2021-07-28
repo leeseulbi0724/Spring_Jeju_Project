@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace = "mapper.stofaq">
+	
+	<!-- 스토어 상품문의 (문의, 답변) 리스트 -->
+	<select id = "faqlist" parameterType = "java.lang.String" resultType = "com.myjeju.vo.StofaqVO">
+		select id, sid, st_id, st_content, st_time, re_content, re_time from myjeju_stofaq where sid = #{sid} order by st_time
+	</select>
+
+	<!--  스토어 상품문의 - 문의 등록 -->
+	<insert id = "faqinsert" parameterType = "com.myjeju.vo.StofaqVO">
+		insert into myjeju_stofaq values(#{id}, #{sid}, 'st_'||sequ_myjeju_store.nextval, #{st_content}, sysdate, null, null)
+	</insert>
+	
+	<!-- 스토어 상품문의 답변 등록 -->
+	<update id = "replylist" parameterType = "com.myjeju.vo.StofaqVO">
+		update myjeju_stofaq set re_content = #{re_content}, re_time = sysdate where st_id = #{st_id}
+	</update>
+	
+	<!-- st_id 받아오기 -->
+	<select id = "getSt_id" parameterType = "java.lang.String" resultType = "com.myjeju.vo.StofaqVO">
+		select id, sid, st_id, st_content from myjeju_stofaq where sid = #{sid}
+	</select>
+	
+	<!-- 스토어 상품문의 삭제 -->
+	<delete id = "faqDelete" parameterType = "java.lang.String">
+		delete from myjeju_stofaq where st_id = #{st_id}
+	</delete>
+	
+	
+	
+	
+	
+</mapper>

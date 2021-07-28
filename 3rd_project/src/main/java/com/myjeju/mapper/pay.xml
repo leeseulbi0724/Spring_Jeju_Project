@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="mapper.pay">
+
+	<insert id="order_result" parameterType="com.myjeju.vo.BasketVO">
+		insert into myjeju_order values(#{id}, #{s_name}, #{s_price}, #{b_count}, #{s_image}, #{s_sfile}, sysdate)
+	</insert>
+	
+	<update id="point_insert" parameterType="com.myjeju.vo.MemberVO">
+		update myjeju_member set point=point+#{point} where id=#{id}
+	</update>
+	
+	<update id="point_delete" parameterType="com.myjeju.vo.MemberVO">
+		update myjeju_member set point=point-#{point} where id=#{id}
+	</update>
+	
+	<insert id="point_plus" parameterType="com.myjeju.vo.MemberVO">
+		insert into myjeju_point values(#{id}, #{point}, #{type}, sysdate)
+	</insert>
+	
+	<insert id="point_minus" parameterType="com.myjeju.vo.MemberVO">
+		insert into myjeju_point values(#{id}, #{point}, #{type}, sysdate)
+	</insert>
+	
+</mapper>

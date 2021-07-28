@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+    <mapper namespace="mapper.mypage">
+    
+    	<!-- 패스워드 일치여부 -->
+		<select id="pass_check" parameterType="com.myjeju.vo.MemberVO"   resultType="java.lang.Integer">
+			select count(*) from myjeju_member where id=#{id} and pass=#{pass}
+		</select>
+		
+		<!-- 회원정보 가져오기 -->
+		<select id="content" parameterType="java.lang.String"   resultType="com.myjeju.vo.MemberVO">
+			select id, pass, name, birth, hp, email, addr1, addr2, point from myjeju_member where id=#{id}
+		</select>
+		
+		<!-- 회원정보 수정하기 -->
+		<update id="info_update" parameterType="com.myjeju.vo.MemberVO">
+			update myjeju_member set email=#{email}, hp=#{hp}, addr1=#{addr1}, addr2=#{addr2} where id=#{id}
+		</update>
+		
+		<!-- 회원탈퇴 -->
+		<delete id="info_out" parameterType="java.lang.String">
+			delete from myjeju_member where id=#{id}
+		</delete>
+		
+		<!-- 자유게시판 불러오기 -->
+		<select id="user_free_list" parameterType="java.lang.String" resultType="com.myjeju.vo.CommunityVO">
+			select fid, ftitle, to_char(fdate,'yyyy-mm-dd') fdate , fhit from myjeju_free_board where id=#{id} order by fdate desc	
+		</select>
+		
+		<!-- 요청게시판 불러오기 -->
+		<select id="user_request_list" parameterType="java.lang.String" resultType="com.myjeju.vo.CommunityVO">
+			select rid, rtitle, to_char(rdate,'yyyy-mm-dd') rdate from myjeju_request_board where id=#{id} order by rdate desc	
+		</select>
+		
+		<!-- 자유게시판 댓글 가져오기 -->
+		<select id="user_comment_list" parameterType="java.lang.String" resultType="com.myjeju.vo.CommunityVO">
+			select fid, cid, ccomment, to_char(cdate,'yyyy-mm-dd') cdate from myjeju_free_comment where id=#{id}
+		</select>
+		
+		<!-- 장바구니 추가 -->
+		<insert id = "basket" parameterType = "com.myjeju.vo.BasketVO">
+			insert into myjeju_basket values (#{id}, #{sid}, #{b_count}, #{s_name}, #{s_price}, #{s_image}, #{s_sfile})
+		</insert>
+		
+		<!-- id비교해서 장바구니에 상품정보 불러오기 -->
+		<select id = "getsid" parameterType = "java.lang.String" resultType = "com.myjeju.vo.BasketVO">
+			select id, sid, b_count, s_name, s_price, s_image, s_sfile from myjeju_basket where id = #{id}
+		</select>
+		
+		<!-- VO에서 sid만 불러오기 -->
+		<select id = "getVOsid" parameterType = "java.lang.String" resultType = "com.myjeju.vo.BasketVO">
+			select sid, b_count from myjeju_basket where id = #{id}
+		</select>
+		
+		<!-- 상품이 이미 등록이 되어있는지 확인 -->
+		<select id="already" parameterType="com.myjeju.vo.BasketVO" resultType="java.lang.Integer">
+			select count(*) from myjeju_basket where id=#{id} and sid=#{sid}
+		</select>
+		
+		<!-- 상품이 이미 있으면 -> 수량만 -->
+		<update id="already_count" parameterType="com.myjeju.vo.BasketVO">
+			update myjeju_basket set b_count = b_count+#{b_count} where id=#{id} and sid=#{sid}
+		</update>	
+		
+		<!-- 장바구니 삭제 -->
+		<delete id="basket_delete" parameterType="java.lang.String">
+			delete from myjeju_basket where sid=#{sid}
+		</delete>
+		
+		<!--  장바구니 컬럼 -->
+		<select id="column" parameterType="java.lang.String" resultType="java.lang.Integer">
+			select count(*) from myjeju_basket where id=#{id}
+		</select>
+		
+		<!-- 결제하기 -->
+		<select id="buy_content" parameterType="map" resultType="com.myjeju.vo.BasketVO">
+			select id, sid, b_count, s_name, s_price, s_image, s_sfile from myjeju_basket where id=#{id} and sid=#{sid} 
+		</select>
+		
+		<!-- 주문내역 가져오기 -->
+		<select id="order_list" parameterType="java.lang.String" resultType="com.myjeju.vo.OrderVO">
+			select id, o_name, o_price, o_count, o_file, o_sfile, o_date from myjeju_order where id=#{id} order by o_date desc
+		</select>
+		
+		<!-- 포인트 내역가져오기 -->
+		<select id="point_list" parameterType="java.lang.String" resultType="com.myjeju.vo.PointVO">
+			select id, type, point, pdate from myjeju_point where id=#{id} order by pdate desc
+		</select>
+		
+		<!-- 회원 예약내역 -->
+		<select id="mreservation_list" parameterType="java.lang.String" resultType="com.myjeju.vo.OrderVO">
+			select id, hid, hdid, roomid, to_char(firstday, 'yyyy-mm-dd') firstday, to_char(lastday, 'yyyy-mm-dd') lastday, rdate, rid from myjeju_member_reservation where id=#{id} order by rdate desc
+		</select>
+		
+		<!-- 숙소이름 가져오기 -->
+		<select id="housename" parameterType="java.lang.String" resultType="com.myjeju.vo.OrderVO">
+			select h_name, h_file from myjeju_house where hid=#{hid}
+		</select>
+		
+		<!-- 방이름 가져오기 -->
+		<select id="roomname" parameterType="java.lang.String" resultType="com.myjeju.vo.OrderVO">
+			select hd_name, hd_price from myjeju_hdetail where hdid=#{hdid}
+		</select>
+		
+		<!-- 주문시퀀스 -->
+		<insert id="order_sequ" parameterType="com.myjeju.vo.BasketVO">
+			insert into myjeju_order_sequ values(#{id}, #{sid})
+		</insert>
+		
+		
+		<!-- My후기 - 스토어 리뷰 -->
+		<select id = "store_review" parameterType = "java.lang.String" resultType = "com.myjeju.vo.StorevVO">
+			select id, sid, srid, sr_review, sr_star, to_char(sr_time, 'yyyy-mm-dd') sr_time from myjeju_storev where id = #{id} order by sr_time desc
+		</select>
+		
+		<!-- My후기 - 여행지 리뷰 -->
+		<select id = "travel_review" parameterType = "java.lang.String" resultType = "com.myjeju.vo.TravelReviewVO">
+			select id, tid, reid, t_review, t_star, to_char(t_time, 'yyyy-mm-dd') t_time from myjeju_travel_review where id = #{id} order by t_time desc
+		</select>
+		
+		<!-- My후기 - 음식점 리뷰 -->
+		<select id = "food_review" parameterType = "java.lang.String" resultType = "com.myjeju.vo.FoodReviewVO">
+			select id, fid, reid, f_review, f_star, to_char(f_time, 'yyyy-mm-dd') f_time from myjeju_food_review where id = #{id} order by f_time desc
+		</select>
+		
+		<!-- My후기 - 카페 리뷰 -->
+		<select id = "cafe_review" parameterType = "java.lang.String" resultType = "com.myjeju.vo.CafeReviewVO">
+			select id, caid, reid, ca_review, ca_star, to_char(ca_time, 'yyyy-mm-dd') ca_time from myjeju_cafe_review where id = #{id} order by ca_time desc
+		</select>
+		
+		<!-- My후기 - 숙소 리뷰 -->
+		<select id = "house_review" parameterType = "java.lang.String" resultType = "com.myjeju.vo.HouseReviewVO">
+			select id, hid, reid, h_review, h_star, to_char(h_time, 'yyyy-mm-dd') h_time from myjeju_house_review where id = #{id} order by h_time desc
+		</select>
+		
+		<!-- My후기 스토어 - 내 리뷰 삭제 -->
+		<delete id = "myreview_store_delete" parameterType = "java.lang.String">
+			delete from myjeju_storev where srid = #{srid}
+		</delete>
+		
+		<!-- My후기 여행지 - 내 리뷰 삭제 -->
+		<delete id = "myreview_travel_delete" parameterType = "java.lang.String">
+			delete from myjeju_travel_review where reid = #{reid}
+		</delete>
+		
+		<!-- My후기 음식점 - 내 리뷰 삭제 -->
+		<delete id = "myreview_food_delete" parameterType = "java.lang.String">
+			delete from myjeju_food_review where reid = #{reid}
+		</delete>
+		
+		<!-- My후기 카페 - 내 리뷰 삭제 -->
+		<delete id = "myreview_cafe_delete" parameterType = "java.lang.String">
+			delete from myjeju_cafe_review where reid = #{reid}
+		</delete>
+		
+		<!-- My후기 숙소 - 내 리뷰 삭제 -->
+		<delete id = "myreview_house_delete" parameterType = "java.lang.String">
+			delete from myjeju_house_review where reid = #{reid}
+		</delete>
+		
+		
+		<!-- 예약내역 -->
+		<select id="order_content" parameterType="java.lang.String" resultType="com.myjeju.vo.OrderVO">
+			select id, hid, hdid, roomid, to_char(firstday, 'yyyy-mm-dd') firstday, to_char(lastday, 'yyyy-mm-dd') lastday, rdate, rid from myjeju_member_reservation where rid=#{rid}
+		</select>
+		
+		<!-- 날짜사이에 모든날짜 구하기 -->
+		<select id="day_result" parameterType="java.lang.String" resultType="com.myjeju.vo.OrderVO">
+			select to_char(to_date(#{firstday}, 'yyyymmdd')+level-1, 'yyyy-mm-dd') as day from dual
+			connect by <![CDATA[level < (to_date(#{lastday}, 'yyyymmdd' ) - to_date(#{firstday}, 'yyyymmdd') +1)]]>			
+		</select>
+		
+		<!-- reservation 0만들기 -->
+		<update id="reservation_result" parameterType="com.myjeju.vo.OrderVO">
+			update myjeju_reservation set available=0 where to_char(rdate,'yyyy-mm-dd') = #{day} and roomid=#{roomid}
+		</update>
+		
+		<!-- 예약내역삭제 -->
+		<delete id="order_delete" parameterType="java.lang.String">
+			delete from myjeju_member_reservation where rid=#{rid}
+		</delete>
+		
+		<!-- 하트 내역 - house -->
+		<select id="house_heart" parameterType="java.lang.String" resultType="com.myjeju.vo.HeartVO">
+			select id, hid from myjeju_h_heart where id=#{id}
+		</select>
+		
+		<!-- 하트 내역 - food -->
+		<select id="food_heart" parameterType="java.lang.String" resultType="com.myjeju.vo.HeartVO">
+			select id, fid from myjeju_f_heart where id=#{id}
+		</select>
+		
+		<!-- 하트 내역 - cafe -->
+		<select id="cafe_heart" parameterType="java.lang.String" resultType="com.myjeju.vo.HeartVO">
+			select id, caid from myjeju_ca_heart where id=#{id}
+		</select>
+		
+		<!-- 하트 내역 - travel -->
+		<select id="travel_heart" parameterType="java.lang.String" resultType="com.myjeju.vo.HeartVO">
+			select id, tid from myjeju_t_heart where id=#{id}
+		</select>
+		
+    </mapper>
