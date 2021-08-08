@@ -213,6 +213,9 @@
 		<section class="detail_image">
 			<div class="detail_image2">
 				<div class="room_text">객실정보</div>
+				<c:if test="${empty list  }">
+					<div class="detail_image3">현재 추가된 객실이 없습니다</div>
+				</c:if>
 	 			<c:forEach var="vo" items="${list}">
 				<div class="detail_image3">
 					<div class="detail_roominfo">

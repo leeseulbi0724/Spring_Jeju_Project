@@ -90,7 +90,7 @@
 			<strong>${point }</strong>p</p>
 		</div>
 		<div class="content">
-			<p>2021.07</p>
+			<p>2021.08</p>
 			<c:if test = "${not empty list }">
 				<c:forEach var = "vo"  items="${list}" begin="0" end="3">
 					<div class="box">

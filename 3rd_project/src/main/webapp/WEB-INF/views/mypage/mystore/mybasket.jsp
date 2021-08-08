@@ -16,11 +16,6 @@
 <script>
 	$(document).ready(function() {
 		
-		
-		/* $('#all_check').on('change', function(){
-			  $('input[id=check]').prop('checked', this.checked);
-			}); */
-		
 		$(function(){
 			  $("button[id='delete']").on("click", drop);
 		    });		  
@@ -39,30 +34,36 @@
 		    };
 		    
 		    $("#all_check").click(function(){
-				 var chk = $("#all_check").prop("checked");
+		    	//테이블 th 쪽 전체 체크버튼 클릭 시
+				 var chk = $("#all_check").prop("checked"); //체크버튼 클릭이 되었을 때
 				 if(chk) {
-				  $("input[id=check]").prop("checked", true);
-				  	itemSum();
+				  $("input[id=check]").prop("checked", true); //전체체크버튼 클릭
+				  	itemSum(); //총 결제금액 계산
 				 } else {
-				  $("input[id=check]").prop("checked", false);
-				  	itemSum();
+				  $("input[id=check]").prop("checked", false); //전체체크버튼 해제
+				  	itemSum(); //총 결제금액 계산
 				 }
 			});
 		    
 		    $("input[id=check]").click(function() {
-		    	itemSum();
+		    	//테이블 td 쪽 체크버튼을 클릭했을 때
+		    	itemSum();  //총 결제 금액 계산
 		    });		    
+		    
 		    function itemSum(){
 		 	   var str = "";
 		 	   var sum = 0;
-		 	   var count = $("input[id=check]").length;
+		 	   var count = $("input[id=check]").length; //체크 된 input 갯수 구하기
 		 	   for(var i=0; i < count; i++ ){
-		 	       if( $("input[id=check]")[i].checked == true ){
-		 		    sum += parseInt($("input[id=check]")[i].value);		 		
+		 	       if( $("input[id=check]")[i].checked == true ){ 
+		 		    sum += parseInt($("input[id=check]")[i].value);	 //체크된 값들의 value값을 sum에 넣기		
 		 	       }
 		 	   }
-		 	   $(".total").html(sum+" 원");
+		 	   $(".total").html(sum+" 원"); //총 결제 금액에 sum값으로 덮어쓰기
 		 	}		   
+		    
+		    
+		    
 		    
 		    /* store_buy.do */
 		    $(".pay").click(function() {		    	
@@ -102,9 +103,13 @@
 			<tbody>			
 			<c:forEach var = "list" items = "${list}">		
 				<tr>
+				
+					<!-- 체크박스 value에 (상품 가격x갯수) 넣어놓기 -->
 					<td><input type="checkbox" checked id="check" value="${list.s_price * list.b_count }" name="${list.sid }"></td>
+					
+					
 					<td>
-						<img src="http://localhost:9000/myjeju/images/store/store_detail/${list.s_sfile}" width=50 height=30>
+						<img src="http://localhost:9000/myjeju/images/store/store_detail/${list.s_image}" width=50 height=30>
 						<a href="#">${list.s_name}</a>
 					</td>
 					<td>

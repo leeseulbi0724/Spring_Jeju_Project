@@ -349,31 +349,36 @@ public class AdminController {
 		public String adfood_write() {
 			return "admin/adfood_write";
 		}
-//음식점 등록 DB
+		
+		
+		//음식점 등록 DB
 		@RequestMapping(value="/adfood_write_proc.do", method={RequestMethod.GET,RequestMethod.POST})
 		public ModelAndView adfood_write_proc(MultipartHttpServletRequest request, @RequestParam("file") MultipartFile[] file) throws Exception {
 			ModelAndView mv = new ModelAndView();			
 			
 			String root_path = request.getSession().getServletContext().getRealPath("/");
-			String attach_path = "\\resources\\images\\food\\food_detail\\";
+			String attach_path = "\\resources\\images\\food\\food_detail\\"; //파일이 저장될 경로
 			String fileOriginName = ""; 
 			String fileMultiName = "";
 			String fileMultiUplodaName= "";
 			
-			UUID uuid = UUID.randomUUID();
+			UUID uuid = UUID.randomUUID(); // uuid를 통해 이미지가 중복되지 않게 처리
 			for(int i=0; i<file.length; i++) { 
+				
 				fileOriginName = file[i].getOriginalFilename(); 
-				System.out.println("기존 파일명 : "+fileOriginName); 
 				File f = new File(root_path + attach_path + uuid +"_"+ fileOriginName); 
-				file[i].transferTo(f);
+				file[i].transferTo(f); //attach_path 경로에 이미지 저장
+				
 				if(i==0) { 
 					fileMultiName += fileOriginName; 
 					fileMultiUplodaName += uuid +"_"+fileOriginName;
 				} else { 
-					fileMultiName += ","+fileOriginName; 
+					fileMultiName += ","+fileOriginName; // 컴마로 구분하여 DB에 저장
 					fileMultiUplodaName += "," + uuid +"_"+fileOriginName;
 					} 
-			}
+			}		
+			
+			
 			FoodVO vo = new FoodVO();
 			vo.setF_file(fileMultiName);
 			vo.setF_sfile(fileMultiUplodaName);
@@ -395,7 +400,7 @@ public class AdminController {
 			
 		}
 		
-//음식점 상세
+		//음식점 상세
 		@RequestMapping(value="/adfood_content.do",method= {RequestMethod.GET,RequestMethod.POST})
 		public ModelAndView adfood_content(String fid) {
 			ModelAndView mv = new ModelAndView();
@@ -428,16 +433,13 @@ public class AdminController {
 			return mv;
 		}
 		
-//음식점 수정하기 DB
+		//음식점 수정하기 DB
 		@RequestMapping(value="/adfood_update_proc.do", method= {RequestMethod.GET,RequestMethod.POST})
 		public ModelAndView adfood_update_proc(MultipartHttpServletRequest request, @RequestParam("file") MultipartFile[] file) throws Exception {
 			ModelAndView mv = new ModelAndView();
 			
-			System.out.println("파일이름" + request.getParameter("f_file"));
-			System.out.print("파일경로" + request.getParameter("f_sfile"));
-			
-			String fileOldName=request.getParameter("f_file");
-			String fileOldRoot = request.getParameter("f_sfile");
+			String fileOldName=request.getParameter("f_file"); 
+			String fileOldRoot = request.getParameter("f_sfile"); //기존에 저장되있던 파일
 			
 			String root_path = request.getSession().getServletContext().getRealPath("/");
 			System.out.print(root_path);
@@ -455,7 +457,7 @@ public class AdminController {
 				System.out.println("기존 파일명 : "+fileOriginName); 
 				File f = new File(root_path + attach_path + uuid +"_"+ fileOriginName); 
 				file[i].transferTo(f);
-				if (fileOriginName != "") {
+				if (fileOriginName != "") { //새로 업로드한 파일
 					if(i==0) { 
 						fileMultiName += fileOriginName; 
 						fileMultiUplodaName += uuid +"_"+fileOriginName;
@@ -466,12 +468,12 @@ public class AdminController {
 				}
 			}
 			
-			String old_name = request.getParameter("old_name");
+			String old_name = request.getParameter("old_name"); //기존 파일 중 수정 시 삭제한 파일
 			String old[] = old_name.split(",");
 			for (int i=0; i<old.length; i++) {
 				File old_file = new File(root_path+attach_path+old[i]);
 				if ( old_file.exists()) {
-					old_file.delete();
+					old_file.delete(); //삭제 파일 폴더에서도 삭제
 				}
 			}
 
@@ -494,7 +496,7 @@ public class AdminController {
 			return mv;
 		}
 		
-//음식점 삭제
+         //음식점 삭제
 		@ResponseBody
 		@RequestMapping(value = "/adfood_delete.do", method=RequestMethod.POST)
 		public boolean adfood_delete(HttpServletRequest request) {
@@ -509,7 +511,7 @@ public class AdminController {
 			for (int i=0; i<old.length; i++) {
 				File old_file = new File(root_path+attach_path+old[i]);
 				if ( old_file.exists()) {
-					old_file.delete();
+					old_file.delete(); // 저장된 모든 파일 폴더에서 삭제
 				}
 			}
 			

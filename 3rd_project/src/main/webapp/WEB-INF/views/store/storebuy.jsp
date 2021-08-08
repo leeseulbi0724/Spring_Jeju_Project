@@ -186,7 +186,7 @@
 				<c:forEach var = "vo"  items="${list}">
 				<tr>
 					<td>
-						<img src="http://localhost:9000/myjeju/images/store/store_detail/${vo.s_sfile }" width=50 height=30>
+						<img src="http://localhost:9000/myjeju/images/store/store_detail/${vo.s_image }" width=50 height=30>
 						<a>${vo.s_name }</a>
 					</td>
 					<td>
@@ -203,7 +203,7 @@
 					<c:forEach var = "vo"  items="${sub_list}">
 					<tr>
 						<td>
-							<img src="http://localhost:9000/myjeju/images/store/store_detail/${vo.s_sfile }" width=50 height=30>
+							<img src="http://localhost:9000/myjeju/images/store/store_detail/${vo.s_image }" width=50 height=30>
 							<a>${vo.s_name }</a>
 						</td>
 						<td>

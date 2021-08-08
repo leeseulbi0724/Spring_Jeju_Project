@@ -15,11 +15,11 @@ public class MessageServiceImpl implements MessageService  {
 	@Override
 	public void sendMessage(String toNumber, String randomNumber) {
 
-		Message coolsms = new Message("NCSJ7HUQJPIEA5BA", "TWFJAU6CNXSK5CCKW65RX5MKSAHENIOL");
+		Message coolsms = new Message("NCSJLYPVHAUND1TW", "ASBO6T5TVWQGMDNXARLFLIDCTTZZKIFC");
 
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("to", toNumber);
-		params.put("from", "01062080637");
+		params.put("from", "01093812489");
 		params.put("type", "SMS");
 		params.put("text", "[JEJU ISLAND] 인증번호 "+randomNumber+" 를 입력하세요.");
 		params.put("app_version", "test app 1.2"); // application name and version

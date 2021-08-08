@@ -129,18 +129,18 @@
 		
 		</div>
 		<div class="content store_content">
-			<p>2021.07</p>
+			<p>2021.08</p>
 			<c:if test="${not empty list }">
 				<c:forEach var = "vo"  items="${list}" begin="0" end="3">
 					<div class="box">
-						<img src="http://localhost:9000/myjeju/images/store/store_detail/${vo.o_sfile }" width=100 height=80>
+						<img src="http://localhost:9000/myjeju/images/store/store_detail/${vo.o_file }" width=100 height=80>
 						<p class="info">${vo.o_date }<br>${vo.o_name }<br><span>총 ${vo.o_count }개</span></p>
 						<p class="price"><fmt:formatNumber value="${vo.o_price }" pattern="#,###" />원</p>
 					</div>
 				</c:forEach>
 				<c:forEach var = "vo"  items="${list}" begin="4" end="${fn:length(list)-1}" >					
 					<div class="box more_box store_more_box">
-						<img src="http://localhost:9000/myjeju/images/store/store_detail/${vo.o_sfile }" width=100 height=80>
+						<img src="http://localhost:9000/myjeju/images/store/store_detail/${vo.o_file }" width=100 height=80>
 						<p class="info">${vo.o_date }<br>${vo.o_name }<br><span>총 ${vo.o_count }개</span></p>
 						<p class="price"><fmt:formatNumber value="${vo.o_price }" pattern="#,###" />원</p>
 					</div>
@@ -151,7 +151,7 @@
 			</div>	
 		</div>		
 		<div class="content reservation_content">
-			<p>2021.07</p>
+			<p>2021.08</p>
 			<c:if test="${not empty mlist }">
 				<c:forEach var = "vo"  items="${mlist}" begin="0" end="3">
 				<fmt:parseDate value="${vo.firstday }" var="strPlanDate" pattern="yyyy-MM-dd"/>

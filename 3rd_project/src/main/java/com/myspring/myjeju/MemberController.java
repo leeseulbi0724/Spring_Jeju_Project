@@ -55,6 +55,7 @@ public class MemberController {
 	@ResponseBody
     @RequestMapping(value = "/sendSms.do", method = RequestMethod.POST )
      public void sendSms(HttpServletRequest request) throws Exception {
+		// 파라미터로 받은 휴대폰번호, 난수로 생성된 인증번호를 전달
 		messageService.sendMessage((String)request.getParameter("to"), (String)request.getParameter("text"));
 	}
 	

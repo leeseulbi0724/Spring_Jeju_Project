@@ -29,6 +29,7 @@ $(document).ready(function() {
 	  $(function(){
 		  $("#up").on("click", comment);
 	    });	  	   
+	  
 	  function comment() {	
         var content = $("#comment").val();
         var fid = $("#fid").val();
@@ -42,6 +43,8 @@ $(document).ready(function() {
             },
         });
 	  }
+	  
+	  
         
   	  $(function(){
 		  $(".com_delete").on("click", com_delete);
